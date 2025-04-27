@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     sudo \
     bash-completion \
+    openssh-client \
+    udev \
     && apt-get clean
 
 # Install ARM GCC toolchain
@@ -26,5 +28,13 @@ ENV PATH="/opt/gcc-arm-none-eabi/bin:${PATH}"
 
 # Create a user (so you don't run as root)
 RUN useradd -m devuser && echo "devuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Setup SSH folder (mounted later, but make sure permissions are ready)
+RUN mkdir -p /home/devuser/.ssh && chmod 700 /home/devuser/.ssh && chown devuser:devuser /home/devuser/.ssh
+
+# Setup udev rules placeholder (optional if you mount /dev and want cleaner USB access)
+RUN mkdir -p /etc/udev/rules.d
+
+# Switch to devuser
 USER devuser
 WORKDIR /workspace

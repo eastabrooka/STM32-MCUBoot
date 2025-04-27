@@ -7,20 +7,29 @@
     "terminal.integrated.defaultProfile.linux": "bash"
   },
   "extensions": [
-  "ms-vscode.cpptools",
-  "ms-vscode.makefile-tools",
-  "ms-vscode.cmake-tools",
-  "twxs.cmake",
-  "webfreak.debug",
-  "notskm.clang-tidy",
-  "eamodio.gitlens",
-  "mhutchie.git-graph",
-  "jeff-hykin.better-cpp-syntax",
-  "llvm-vs-code-extensions.vscode-clangd",
-  "ms-vscode.cpptools-extension-pack"
+    "ms-vscode.cpptools",
+    "ms-vscode.makefile-tools",
+    "ms-vscode.cmake-tools",
+    "twxs.cmake",
+    "webfreak.debug",
+    "notskm.clang-tidy",
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
+    "jeff-hykin.better-cpp-syntax",
+    "llvm-vs-code-extensions.vscode-clangd",
+    "ms-vscode.cpptools-extension-pack"
   ],
   "mounts": [
-    "source=${localWorkspaceFolder},target=/workspace,type=bind"
+    "source=${localWorkspaceFolder},target=/workspace,type=bind",
+    "source=/dev,target=/dev,type=bind",
+    "source=${env:HOME}/.ssh,target=/home/devuser/.ssh,type=bind,consistency=cached"
   ],
-  "workspaceFolder": "/workspace"
+  "workspaceFolder": "/workspace",
+  "runArgs": [
+    "--privileged",
+    "--cap-add=SYS_PTRACE",
+    "--security-opt",
+    "seccomp=unconfined"
+  ],
+  "remoteUser": "devuser"
 }
