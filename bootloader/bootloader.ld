@@ -6,6 +6,8 @@ MEMORY
     RAM (rwx)   : ORIGIN = 0x20000000, LENGTH = 320K   /* SRAM1 + SRAM2 combined */
 }
 
+_estack = ORIGIN(RAM) + LENGTH(RAM);
+
 SECTIONS
 {
     .isr_vector :
@@ -21,20 +23,22 @@ SECTIONS
         *(.eh_frame*)
     } > FLASH
 
-    .init_array :
-    {
-        KEEP(*(SORT(.init_array*)))
-    } > FLASH
+    /* Provide start address for .data initialization in RAM */
+    _sidata = LOADADDR(.data);
 
-    .data : AT(ADDR(.text) + SIZEOF(.text))
+    .data : AT(LOADADDR(.text) + SIZEOF(.text))
     {
-        *(.data*)              /* Initialized data, will be copied to RAM */
+        _sdata = .;
+        *(.data*)
+        _edata = .;
     } > RAM
 
     .bss :
     {
+        _sbss = .;
         *(.bss*)
         *(COMMON)
+        _ebss = .;
     } > RAM
 
     /* Optional: define a stack */
@@ -45,4 +49,5 @@ SECTIONS
     } > RAM
 }
 
-/* End of bootloader.ld */
+/* Define end symbol for _sbrk */
+PROVIDE(end = _ebss);

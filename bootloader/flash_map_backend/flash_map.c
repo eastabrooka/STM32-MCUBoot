@@ -12,17 +12,3 @@ int flash_map_init(void)
     return 0;
 }
 
-int flash_area_open(uint8_t id, const struct flash_area **fa)
-{
-    (void)id;
-    (void)fa;
-    return 0;
-}
-
-void flash_area_close(const struct flash_area *fa)
-{
-    (void)fa;
-}
-
-// These are weak stubs.
-// Real read/write/erase happens in flash_map_backend.c
