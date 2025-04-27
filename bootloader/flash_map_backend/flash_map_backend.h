@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-#include "flash_map/flash_map.h"
+#include "flash_map_backend/flash_map.h"
 
 #ifdef __cplusplus
 extern "C" {

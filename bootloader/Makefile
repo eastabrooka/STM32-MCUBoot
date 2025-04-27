@@ -7,6 +7,9 @@ OBJCOPY  := arm-none-eabi-objcopy
 # External dependencies
 MCUBOOT_DIR := $(ROOT_DIR)/mcuboot/boot/bootutil
 CMSIS_INC_DIR := $(ROOT_DIR)/cmsis/CMSIS/Core/Include
+STM32_HAL_INC_DIR := $(ROOT_DIR)/external/STM32CUBE/Drivers/STM32L4xx_HAL_Driver/Inc
+STM32_CMSIS_DEVICE_INC_DIR := $(ROOT_DIR)/external/STM32CUBE/Drivers/CMSIS/Device/ST/STM32L4xx/Include
+STM32_CMSIS_CORE_INC_DIR := $(ROOT_DIR)/external/STM32CUBE/Drivers/CMSIS/Include
 
 # Directories
 PROJECT_DIR := $(ROOT_DIR)/bootloader
@@ -18,9 +21,9 @@ SRC_FILES := \
     $(PROJECT_DIR)/main.c \
     $(PROJECT_DIR)/mcuboot_port.c \
     $(PROJECT_DIR)/startup_stm32l4a6xx.s \
-    $(PROJECT_DIR)/flash_map_backend/flash_map_backend.c \
-    $(PROJECT_DIR)/flash_map/flash_map.c \
     $(PROJECT_DIR)/system_stm32l4xx.c \
+    $(PROJECT_DIR)/flash_map_backend/flash_map.c \
+    $(PROJECT_DIR)/flash_map_backend/flash_map_backend.c \
     $(MCUBOOT_SRC_DIR)/loader.c \
     $(MCUBOOT_SRC_DIR)/bootutil_misc.c \
     $(MCUBOOT_SRC_DIR)/bootutil_public.c \
@@ -29,9 +32,13 @@ SRC_FILES := \
 # Include paths
 INCLUDE_PATHS := \
     -I$(PROJECT_DIR) \
-    -I$(PROJECT_DIR)/flash_map \
+    -I$(PROJECT_DIR)/flash_map_backend \
+    -I$(PROJECT_DIR)/mcuboot_config \
     -I$(MCUBOOT_INC_DIR) \
-    -I$(CMSIS_INC_DIR)
+    -I$(CMSIS_INC_DIR) \
+    -I$(STM32_HAL_INC_DIR) \
+    -I$(STM32_CMSIS_DEVICE_INC_DIR) \
+    -I$(STM32_CMSIS_CORE_INC_DIR)
 
 # Compiler flags
 CFLAGS := \
