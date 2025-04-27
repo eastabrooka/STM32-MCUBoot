@@ -1,6 +1,10 @@
-#include "flash_map_backend/flash_map_backend.h"
-#include "sysflash.h"
+#include "flash_map/flash_map_backend.h"
+#include "stm32l4a6xx.h"
 #include <string.h>
+#include <stddef.h>
+
+#include "stm32l4xx_hal_flash.h"
+#include "stm32l4xx_hal_flash_ex.h"
 
 extern uint8_t _flash_primary_start;  // Symbols from linker
 extern uint8_t _flash_secondary_start;

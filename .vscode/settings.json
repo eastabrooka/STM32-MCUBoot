@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "bootutil.h": "c"
+        "bootutil.h": "c",
+        "string.h": "c"
     }
 }

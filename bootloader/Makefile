@@ -18,8 +18,8 @@ SRC_FILES := \
     $(PROJECT_DIR)/main.c \
     $(PROJECT_DIR)/mcuboot_port.c \
     $(PROJECT_DIR)/startup_stm32l4a6xx.s \
-    $(PROJECT_DIR)/flash_map_backend.c \
-    $(PROJECT_DIR)/flash_map.c \
+    $(PROJECT_DIR)/flash_map_backend/flash_map_backend.c \
+    $(PROJECT_DIR)/flash_map/flash_map.c \
     $(PROJECT_DIR)/system_stm32l4xx.c \
     $(MCUBOOT_SRC_DIR)/loader.c \
     $(MCUBOOT_SRC_DIR)/bootutil_misc.c \
@@ -29,6 +29,7 @@ SRC_FILES := \
 # Include paths
 INCLUDE_PATHS := \
     -I$(PROJECT_DIR) \
+    -I$(PROJECT_DIR)/flash_map \
     -I$(MCUBOOT_INC_DIR) \
     -I$(CMSIS_INC_DIR)
 
