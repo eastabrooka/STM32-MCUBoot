@@ -47,7 +47,11 @@ Flash is divided like this:
 Don't want to "Do a False Advertising 😅"
 
 Goals
+
 ✅ Get MCUboot running on STM32 without CubeMX.
+
 ✅ Learn how to manually manage flash layout, linker scripts, and memory offsets.
+
 ✅ Use pure Makefiles and GCC, no extra bloat.
+
 ✅ Build something simple first, then add security later if needed.
