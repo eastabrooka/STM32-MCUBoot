@@ -7,9 +7,17 @@
     "terminal.integrated.defaultProfile.linux": "bash"
   },
   "extensions": [
-    "ms-vscode.cpptools",
-    "marus25.cortex-debug",
-    "ms-vscode.cmake-tools"
+  "ms-vscode.cpptools",
+  "ms-vscode.makefile-tools",
+  "ms-vscode.cmake-tools",
+  "twxs.cmake",
+  "webfreak.debug",
+  "notskm.clang-tidy",
+  "eamodio.gitlens",
+  "mhutchie.git-graph",
+  "jeff-hykin.better-cpp-syntax",
+  "llvm-vs-code-extensions.vscode-clangd",
+  "ms-vscode.cpptools-extension-pack"
   ],
   "mounts": [
     "source=${localWorkspaceFolder},target=/workspace,type=bind"
