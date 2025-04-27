@@ -28,7 +28,43 @@ SRC_FILES := \
     $(MCUBOOT_SRC_DIR)/loader.c \
     $(MCUBOOT_SRC_DIR)/bootutil_misc.c \
     $(MCUBOOT_SRC_DIR)/bootutil_public.c \
-    $(MCUBOOT_SRC_DIR)/fault_injection_hardening.c
+    $(MCUBOOT_SRC_DIR)/fault_injection_hardening.c \
+    $(MCUBOOT_SRC_DIR)/boot_record.c \
+    $(MCUBOOT_SRC_DIR)/bootutil_misc.c \
+    $(MCUBOOT_SRC_DIR)/caps.c \
+    $(MCUBOOT_SRC_DIR)/encrypted.c \
+    $(MCUBOOT_SRC_DIR)/fault_injection_hardening.c \
+    $(MCUBOOT_SRC_DIR)/fault_injection_hardening_delay_rng_mbedtls.c \
+    $(MCUBOOT_SRC_DIR)/image_ed25519.c \
+    $(MCUBOOT_SRC_DIR)/image_rsa.c \
+    $(MCUBOOT_SRC_DIR)/image_validate.c \
+    $(MCUBOOT_SRC_DIR)/loader.c \
+    $(MCUBOOT_SRC_DIR)/swap_misc.c \
+    $(MCUBOOT_SRC_DIR)/swap_move.c \
+    $(MCUBOOT_SRC_DIR)/swap_scratch.c \
+    $(MCUBOOT_SRC_DIR)/tlv.c
+
+
+
+TINYCRYPT_DIR := $(ROOT_DIR)/mcuboot/ext/tinycrypt/lib
+TINYCRYPT_SRC_DIR := $(TINYCRYPT_DIR)/source
+TINYCRYPT_INC_DIR := $(TINYCRYPT_DIR)/include
+
+TINYCRYPT_SRC_FILES := \
+  $(TINYCRYPT_SRC_DIR)/aes_decrypt.c \
+  $(TINYCRYPT_SRC_DIR)/aes_encrypt.c \
+  $(TINYCRYPT_SRC_DIR)/cbc_mode.c \
+  $(TINYCRYPT_SRC_DIR)/ccm_mode.c \
+  $(TINYCRYPT_SRC_DIR)/cmac_mode.c \
+  $(TINYCRYPT_SRC_DIR)/ctr_mode.c \
+  $(TINYCRYPT_SRC_DIR)/ctr_prng.c \
+  $(TINYCRYPT_SRC_DIR)/hmac.c \
+  $(TINYCRYPT_SRC_DIR)/hmac_prng.c \
+  $(TINYCRYPT_SRC_DIR)/sha256.c \
+  $(TINYCRYPT_SRC_DIR)/utils.c
+
+SRC_FILES += $(TINYCRYPT_SRC_FILES)
+
 
 # Include paths
 INCLUDE_PATHS := \
@@ -36,6 +72,7 @@ INCLUDE_PATHS := \
     -I$(PROJECT_DIR)/flash_map_backend \
     -I$(PROJECT_DIR)/mcuboot_config \
     -I$(PROJECT_DIR)/sysflash \
+    -I$(TINYCRYPT_INC_DIR) \
     -I$(MCUBOOT_INC_DIR) \
     -I$(CMSIS_INC_DIR) \
     -I$(STM32_HAL_INC_DIR) \
