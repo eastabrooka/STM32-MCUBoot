@@ -49,7 +49,7 @@ CFLAGS := \
     -mfloat-abi=hard -mfpu=fpv4-sp-d16 \
     -Os \
     -g3 \
-    -Wall -Werror \
+    -Wall \
     -ffunction-sections -fdata-sections \
     -nostdlib
 

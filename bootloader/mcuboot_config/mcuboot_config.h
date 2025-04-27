@@ -1,26 +1,25 @@
 #pragma once
 
-// Enable overwrite-only mode (no swap)
+
+// Area IDs for images
+#define FLASH_AREA_IMAGE_PRIMARY(x)    (1)
+#define FLASH_AREA_IMAGE_SECONDARY(x)  (2)
+
+// Tell MCUBoot what behavior you want
 #define MCUBOOT_OVERWRITE_ONLY 1
+#define MCUBOOT_PRIMARY_ONLY 1
+#define MCUBOOT_MAX_IMG_SECTORS   128
 
-// Only one image slot (image 0)
-#define MCUBOOT_IMAGE_NUMBER 1
 
-// No signature checking (no RSA, no ECDSA, no crypto)
-#define MCUBOOT_SIGN_RSA       0
-#define MCUBOOT_SIGN_EC256     0
-#define MCUBOOT_SIGN_ED25519   0
-
-// No encryption
-#define MCUBOOT_ENCRYPT_RSA    0
-#define MCUBOOT_ENCRYPT_EC256  0
-
-// No boot trailer validation (optional but cleaner)
-#define MCUBOOT_VALIDATE_PRIMARY_SLOT 0
-
-// Disable upgrade (because no OTA in this basic setup)
-#define MCUBOOT_DIRECT_XIP 0
-
-// Disable logging
+// Disable logging if not needed
 #define MCUBOOT_HAVE_LOGGING 0
-#define MCUBOOT_LOG_LEVEL 0
+
+// Fake logging macros if needed
+#define MCUBOOT_LOG_ERR(...) 
+#define MCUBOOT_LOG_WRN(...) 
+#define MCUBOOT_LOG_INF(...) 
+#define MCUBOOT_LOG_DBG(...)
+
+
+#define MCUBOOT_WATCHDOG_FEED()    do {} while (0)
+

@@ -32,6 +32,21 @@ int flash_area_erase(const struct flash_area *fa, uint32_t off, uint32_t len);
 size_t flash_area_align(const struct flash_area *fa);
 uint8_t flash_area_erased_val(const struct flash_area *fa);
 
+uint32_t flash_area_get_off(const struct flash_area *fa);
+uint32_t flash_area_get_size(const struct flash_area *fa);
+uint8_t flash_area_get_device_id(const struct flash_area *fa);
+int flash_area_get_sector(const struct flash_area *fa, uint32_t off, struct flash_sector *sector);
+uint32_t flash_sector_get_off(const struct flash_sector *sector);
+uint32_t flash_sector_get_size(const struct flash_sector *sector);
+
+// Add these in flash_map.h (or another common header that loader.c includes)
+
+int flash_area_to_sectors(int fa_id, int *cnt, void *sectors);
+int flash_area_id_from_multi_image_slot(int image_index, int slot);
+int flash_area_id_from_image_slot(int slot);
+
+
+
 #ifdef __cplusplus
 }
 #endif
