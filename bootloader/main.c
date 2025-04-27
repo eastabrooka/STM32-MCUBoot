@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "bootutil/bootutil.h"
+#include "stm32l4a6xx.h"
 #include "core_cm4.h"
 
 extern void SystemInit(void);

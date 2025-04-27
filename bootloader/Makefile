@@ -6,6 +6,7 @@ OBJCOPY  := arm-none-eabi-objcopy
 
 # External dependencies
 MCUBOOT_DIR := $(ROOT_DIR)/mcuboot/boot/bootutil
+CMSIS_INC_DIR := $(ROOT_DIR)/cmsis/CMSIS/Core/Include
 
 # Directories
 PROJECT_DIR := $(ROOT_DIR)/bootloader
@@ -17,15 +18,19 @@ SRC_FILES := \
     $(PROJECT_DIR)/main.c \
     $(PROJECT_DIR)/mcuboot_port.c \
     $(PROJECT_DIR)/startup_stm32l4a6xx.s \
+    $(PROJECT_DIR)/flash_map_backend.c \
+    $(PROJECT_DIR)/flash_map.c \
+    $(PROJECT_DIR)/system_stm32l4xx.c \
     $(MCUBOOT_SRC_DIR)/loader.c \
     $(MCUBOOT_SRC_DIR)/bootutil_misc.c \
     $(MCUBOOT_SRC_DIR)/bootutil_public.c \
-    $(MCUBOOT_SRC_DIR)/fault_injection_hardening.c 
+    $(MCUBOOT_SRC_DIR)/fault_injection_hardening.c
 
 # Include paths
 INCLUDE_PATHS := \
     -I$(PROJECT_DIR) \
-    -I$(MCUBOOT_INC_DIR) 
+    -I$(MCUBOOT_INC_DIR) \
+    -I$(CMSIS_INC_DIR)
 
 # Compiler flags
 CFLAGS := \
@@ -36,11 +41,11 @@ CFLAGS := \
     -g3 \
     -Wall -Werror \
     -ffunction-sections -fdata-sections \
-    -nostdlib 
+    -nostdlib
 
 # Linker flags
 LDFLAGS := \
-    -T$(ROOT_DIR)/bootloader/bootloader.ld \
+    -T$(PROJECT_DIR)/bootloader.ld \
     -Wl,-Map,$(BUILD_DIR)/bootloader.map \
     --specs=nano.specs \
     -Wl,--gc-sections
