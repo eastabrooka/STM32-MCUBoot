@@ -42,81 +42,9 @@ Flash is divided like this:
 
 ## Build Instructions
 
-**Clone project:**
-```bash
-git clone --recursive <repo-url>
-(If you forgot --recursive, do git submodule update --init --recursive.)
+-> Removed until I have a working example for now. 
 
-Toolchain:
-
-GCC ARM Embedded (arm-none-eabi-gcc)
-
-Python 3 (for imgtool.py)
-
-Build bootloader:
-
-bash
-Copy
-Edit
-cd bootloader
-make
-Build application:
-
-bash
-Copy
-Edit
-cd ../app
-make
-Sign application image:
-
-bash
-Copy
-Edit
-python ../mcuboot/scripts/imgtool.py sign \
-    --header-size 0x100 --align 8 --pad-header \
-    --version 1.0.0 --slot-size 0x20000 \
-    --key none \
-    app.bin app_flash.bin
-Flash Instructions
-Flash bootloader to 0x08000000:
-
-bash
-Copy
-Edit
-openocd -f board/st_nucleo_l4.cfg -c "program bootloader.bin verify reset exit 0x08000000"
-Flash signed app to 0x08008000:
-
-bash
-Copy
-Edit
-openocd -f board/st_nucleo_l4.cfg -c "program app_flash.bin verify reset exit 0x08008000"
-(Or use STM32CubeProgrammer or ST-Link Utility.)
-
-Reset board.
-Bootloader will run, find the app, and jump to it.
-You should see the user LED blinking.
-
-Firmware Update Flow (Manual Test)
-Build new app (different blink rate).
-
-Sign it with a higher version (e.g., 2.0.0).
-
-Flash new signed app to secondary slot (0x08028000).
-
-Reset the board.
-
-Bootloader will detect new firmware, copy it to primary slot, and boot it.
-
-Notes
-No signature checking (no crypto).
-
-No rollback.
-
-Flash operations done using STM32 internal flash HAL.
-
-App must be linked to start after 0x100-byte MCUboot header.
-
-Bootloader sets up vector table for app before jumping.
+Don't want to "Do a False Advertising 😅"
 
 Goals
 ✅ Get MCUboot running on STM32 without CubeMX.
