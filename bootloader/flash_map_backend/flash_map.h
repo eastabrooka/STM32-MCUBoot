@@ -1,14 +1,26 @@
 #pragma once
 
 #include <stdint.h>
-#include <stddef.h>   
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// Forward declaration for flash_area structure
-struct flash_area;
+// Full struct definition for flash_area
+struct flash_area {
+    uint8_t  fa_id;
+    uint8_t  fa_device_id;
+    uint16_t pad;
+    uint32_t fa_off;
+    uint32_t fa_size;
+};
+
+// Full struct definition for flash_sector
+struct flash_sector {
+    uint32_t fs_off;
+    uint32_t fs_size;
+};
 
 // Function prototypes that MCUboot expects
 
