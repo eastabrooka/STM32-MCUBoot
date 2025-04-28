@@ -4,3 +4,6 @@
 [submodule "cmsis"]
 	path = cmsis
 	url = https://github.com/ARM-software/CMSIS_5.git
+[submodule "STM32CubeL4"]
+	path = STM32CubeL4
+	url = https://github.com/STMicroelectronics/STM32CubeL4.git
