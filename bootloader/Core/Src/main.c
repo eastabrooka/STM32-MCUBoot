@@ -19,25 +19,17 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
 
-/* USER CODE END Includes */
+#include <stdio.h>
+#include "shell_port.h"
+#include "logging.h"
 
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
+#include "bootutil/bootutil.h"
+#include "bootutil/image.h"
 
-/* USER CODE END PTD */
 
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
+#include <string.h>
 
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef hlpuart1;
@@ -325,20 +317,6 @@ void assert_failed(uint8_t *file, uint32_t line)
 
 
 ///// Upstream Example 
-
-#include <stdio.h>
-
-#include "cmsis_shim.h"
-#include "hal/uart.h"
-#include "hal/logging.h"
-
-#include "shell_port.h"
-
-#include "bootutil/bootutil.h"
-#include "bootutil/image.h"
-
-
-#include <string.h>
 
 //! A very naive implementation of the newlib _sbrk dependency function
 caddr_t _sbrk(int incr);

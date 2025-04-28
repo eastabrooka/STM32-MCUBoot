@@ -35,6 +35,37 @@ BUILD_DIR = build
 # source
 ######################################
 # C sources
+
+ROOT_DIR := $(abspath ..)
+
+
+MCUBOOT_DIR := $(ROOT_DIR)/mcuboot/boot/bootutil
+MCUBOOT_SRC_DIR := $(MCUBOOT_DIR)/src
+MCUBOOT_INC_DIR := $(MCUBOOT_DIR)/include
+
+MCUBOOT_SRC_FILES += \
+  $(MCUBOOT_SRC_DIR)/boot_record.c \
+  $(MCUBOOT_SRC_DIR)/bootutil_misc.c \
+  $(MCUBOOT_SRC_DIR)/caps.c \
+  $(MCUBOOT_SRC_DIR)/encrypted.c \
+  $(MCUBOOT_SRC_DIR)/fault_injection_hardening.c \
+  $(MCUBOOT_SRC_DIR)/fault_injection_hardening_delay_rng_mbedtls.c \
+  $(MCUBOOT_SRC_DIR)/image_ec.c \
+  $(MCUBOOT_SRC_DIR)/image_ec256.c \
+  $(MCUBOOT_SRC_DIR)/image_ed25519.c \
+  $(MCUBOOT_SRC_DIR)/image_rsa.c \
+  $(MCUBOOT_SRC_DIR)/image_validate.c \
+  $(MCUBOOT_SRC_DIR)/loader.c \
+  $(MCUBOOT_SRC_DIR)/swap_misc.c \
+  $(MCUBOOT_SRC_DIR)/swap_move.c \
+  $(MCUBOOT_SRC_DIR)/swap_scratch.c \
+  $(MCUBOOT_SRC_DIR)/tlv.c
+
+# Also need mcuboot_config/ on path
+MCUBOOT_INC_PATHS := -I$(MCUBOOT_INC_DIR)
+
+
+
 C_SOURCES =  \
 Core/Src/main.c \
 Core/Src/stm32l4xx_it.c \
@@ -61,6 +92,9 @@ Core/Src/stm32l4xx_hal_msp.c \
 Core/Src/system_stm32l4xx.c \
 Core/Src/sysmem.c \
 Core/Src/syscalls.c  
+
+C_SOURCES += $(MCUBOOT_SRC_FILES)
+
 
 # ASM sources
 ASM_SOURCES =  \
@@ -125,6 +159,9 @@ C_INCLUDES =  \
 -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy \
 -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include \
 -I../Drivers/CMSIS/Include
+
+C_INCLUDES += $(MCUBOOT_INC_PATHS)
+
 
 
 # compile gcc flags
