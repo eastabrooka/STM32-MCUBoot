@@ -1,15 +1,21 @@
 #ifndef SERIAL_INTERFACE_H
 #define SERIAL_INTERFACE_H
 
+#include "stm32l4xx_hal.h"
 #include <stdint.h>
+#include <stdio.h>         // for printf
 
-/// Call once at startup, e.g. Serial_Init(115200);
-void Serial_Init(uint32_t baudrate);
+// The UART instance you use for console
+extern UART_HandleTypeDef hlpuart1;
 
-/// Reads one byte from the RX ring buffer, or –1 if empty
+// GPIO + UART init (from serial_interface.c)
+void MX_GPIO_Init(void);
+void MX_LPUART1_UART_Init(void);
+
+// RX ring buffer
 int  Serial_ReadChar(void);
 
-/// Redirect printf (or putchar) to UART
+// printf() / putchar() redirect
 int  __io_putchar(int ch);
 
 #endif // SERIAL_INTERFACE_H
