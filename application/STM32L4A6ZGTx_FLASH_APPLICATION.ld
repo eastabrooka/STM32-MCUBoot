@@ -9,16 +9,22 @@ _Min_Stack_Size = 0x400;
 /* Memory layout */
 MEMORY
 {
-  RAM (xrw)    : ORIGIN = 0x20000000, LENGTH = 320K
-  RAM2 (xrw)   : ORIGIN = 0x10000000, LENGTH = 64K
-  FLASH (rx)   : ORIGIN = 0x08020200, LENGTH = 0x1FE00 /* (128KB - 512 bytes) */
+  RAM (xrw)     : ORIGIN = 0x20000000, LENGTH = 320K
+  RAM2 (xrw)    : ORIGIN = 0x10000000, LENGTH = 64K
+  FLASH_HEADER (rx) : ORIGIN = 0x08020000, LENGTH = 0x200  /* 512 bytes reserved for header/magic */
+  FLASH_APP    (rx) : ORIGIN = 0x08020200, LENGTH = 0x1FE00 /* Rest of 128K after header */
 }
 
 /* Sections */
 SECTIONS
 {
-  /* Reserved MCUboot header space at 0x08020000 - 0x080201FF */
-  /* Real app starts at 0x08020200 */
+  /* Header/magic area */
+  .header :
+  {
+    . = ALIGN(8);
+    KEEP(*(.magic_packet))
+    . = ALIGN(8);
+  } >FLASH_HEADER
 
   /* Startup code */
   .isr_vector :
@@ -26,7 +32,7 @@ SECTIONS
     . = ALIGN(8);
     KEEP(*(.isr_vector))
     . = ALIGN(8);
-  } >FLASH
+  } >FLASH_APP
 
   /* Program code */
   .text :
@@ -43,7 +49,7 @@ SECTIONS
 
     . = ALIGN(8);
     _etext = .;
-  } >FLASH
+  } >FLASH_APP
 
   /* Constants */
   .rodata :
@@ -52,7 +58,7 @@ SECTIONS
     *(.rodata)
     *(.rodata*)
     . = ALIGN(8);
-  } >FLASH
+  } >FLASH_APP
 
   /* ARM sections */
   .ARM.extab :
@@ -60,7 +66,7 @@ SECTIONS
     . = ALIGN(8);
     *(.ARM.extab* .gnu.linkonce.armextab.*)
     . = ALIGN(8);
-  } >FLASH
+  } >FLASH_APP
 
   .ARM :
   {
@@ -69,7 +75,7 @@ SECTIONS
     *(.ARM.exidx*)
     __exidx_end = .;
     . = ALIGN(8);
-  } >FLASH
+  } >FLASH_APP
 
   /* Arrays */
   .preinit_array :
@@ -79,7 +85,7 @@ SECTIONS
     KEEP(*(.preinit_array*))
     PROVIDE_HIDDEN(__preinit_array_end = .);
     . = ALIGN(8);
-  } >FLASH
+  } >FLASH_APP
 
   .init_array :
   {
@@ -89,7 +95,7 @@ SECTIONS
     KEEP(*(.init_array*))
     PROVIDE_HIDDEN(__init_array_end = .);
     . = ALIGN(8);
-  } >FLASH
+  } >FLASH_APP
 
   .fini_array :
   {
@@ -99,12 +105,12 @@ SECTIONS
     KEEP(*(.fini_array*))
     PROVIDE_HIDDEN(__fini_array_end = .);
     . = ALIGN(8);
-  } >FLASH
+  } >FLASH_APP
 
   /* Initialized data */
   _sidata = LOADADDR(.data);
 
-  .data : 
+  .data :
   {
     . = ALIGN(8);
     _sdata = .;
@@ -112,7 +118,7 @@ SECTIONS
     *(.data*)
     . = ALIGN(8);
     _edata = .;
-  } >RAM AT> FLASH
+  } >RAM AT> FLASH_APP
 
   /* Uninitialized data */
   .bss :

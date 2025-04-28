@@ -57,7 +57,7 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 ASFLAGS = $(CFLAGS)
 
 # Linker
-LDSCRIPT = STM32L4A6ZGTx_FLASH.ld
+LDSCRIPT = STM32L4A6ZGTx_FLASH_BOOTLOADER.ld
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 LIBS = -lc -lm -lnosys
 

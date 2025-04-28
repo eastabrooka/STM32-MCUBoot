@@ -376,4 +376,15 @@ void assert_failed(uint8_t *file, uint32_t line)
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
+
+
+__attribute__((section(".magic_packet")))
+const uint8_t magic_packet[16] = {
+    0x77, 0xC2, 0x95, 0xF3,
+    0x60, 0xD2, 0xEF, 0x7F,
+    0x35, 0x52, 0x50, 0x0F,
+    0x2C, 0xB6, 0x79, 0x80
+};
+
+
 #endif /* USE_FULL_ASSERT */
