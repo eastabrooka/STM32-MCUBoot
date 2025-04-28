@@ -374,3 +374,24 @@ static void do_boot(struct boot_rsp *rsp) {
 
   start_app(app_start, app_sp);
 }
+
+
+
+
+
+
+// Stubs for now 
+
+void shell_processing_loop(void)
+{
+    while (1) {
+        // empty for now
+    }
+}
+
+void uart_tx_blocking(const void *data, size_t len)
+{
+    (void)data;
+    (void)len;
+    // do nothing for now
+}
