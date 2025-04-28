@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "bootutil.h": "c",
+        "string.h": "c",
+        "stm32l4a6xx.h": "c",
+        "flash_map.h": "c",
+        "system_stm32l4xx.h": "c",
+        "stdint.h": "c",
+        "stm32l4xx_hal_def.h": "c"
+    }
+}
