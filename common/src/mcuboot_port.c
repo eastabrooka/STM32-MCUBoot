@@ -17,10 +17,10 @@
 //
 
 #define BOOTLOADER_START_ADDRESS 0x08000000
-#define BOOTLOADER_SIZE (32 * 1024)
+#define BOOTLOADER_SIZE (128 * 1024) // 128KB bootloader flash region
 
-#define APPLICATION_PRIMARY_START_ADDRESS (BOOTLOADER_START_ADDRESS + BOOTLOADER_SIZE)
-#define APPLICATION_SIZE (128 * 1024)
+#define APPLICATION_PRIMARY_START_ADDRESS 0x08020000
+#define APPLICATION_SIZE (128 * 1024) // 128KB for primary image
 
 #define APPLICATION_SECONDARY_START_ADDRESS (APPLICATION_PRIMARY_START_ADDRESS + APPLICATION_SIZE)
 
@@ -29,6 +29,7 @@
 //
 
 #define FLASH_SECTOR_SIZE 2048U // 2KB sectors for STM32L4
+//#define FLASH_SECTOR_SIZE 4096U // 4KB sectors for STM32L4A6
 
 //
 // Flash areas
@@ -291,5 +292,5 @@ int flash_area_id_from_multi_image_slot(int image_index, int slot) {
 
 
 int flash_area_id_from_image_slot(int slot) {
-  return flash_area_id_from_multi_image_slot(0, slot);
+    return flash_area_id_from_multi_image_slot(0, slot);
 }

@@ -166,9 +166,9 @@ int main(void)
   char msg[] = "Hurr Durr, I'm a Bootloader\r\n";
   HAL_UART_Transmit(&hlpuart1, (uint8_t*)msg, sizeof(msg)-1, HAL_MAX_DELAY);
 
-  read_flash();
+  //read_flash();
   
-  EXAMPLE_LOG("\n\n___  ________ _   _ _                 _   ");
+  EXAMPLE_LOG("\n\r___  ________ _   _ _                 _   ");
   EXAMPLE_LOG("|  \\/  /  __ \\ | | | |               | |  ");
   EXAMPLE_LOG("| .  . | /  \\/ | | | |__   ___   ___ | |_ ");
   EXAMPLE_LOG("| |\\/| | |   | | | | '_ \\ / _ \\ / _ \\| __|");
