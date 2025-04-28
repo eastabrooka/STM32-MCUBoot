@@ -50,14 +50,21 @@ UART_HandleTypeDef hlpuart1;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_LPUART1_UART_Init(void);
-/* USER CODE BEGIN PFP */
 
-/* USER CODE END PFP */
 
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
+void GreenLED(GPIO_PinState State)
+{
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, State);
+}
+void BlueLED(GPIO_PinState State)
+{
+  HAL_GPIO_WritePin(GPIOB, LD2_Pin, State);
+}
+void RedLED(GPIO_PinState State)
+{
+  HAL_GPIO_WritePin(GPIOB, LD3_Pin, State);
+}
 
-/* USER CODE END 0 */
 
 /**
   * @brief  The application entry point.
@@ -90,13 +97,10 @@ int main(void)
   MX_GPIO_Init();
   MX_LPUART1_UART_Init();
 
-  /* USER CODE BEGIN 3 */
-  // Set all LEDs on
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(GPIOB, LD2_Pin | LD3_Pin, GPIO_PIN_SET);
+  GreenLED(GPIO_PIN_SET);
 
   // Echo "Hello World"
-  char msg[] = "Hello World\r\n";
+  char msg[] = "Hurr Durr, I'm an Application\r\n";
   HAL_UART_Transmit(&hlpuart1, (uint8_t*)msg, sizeof(msg)-1, HAL_MAX_DELAY);
 
   while (1)

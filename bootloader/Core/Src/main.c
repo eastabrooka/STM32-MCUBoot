@@ -50,14 +50,51 @@ UART_HandleTypeDef hlpuart1;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_LPUART1_UART_Init(void);
-/* USER CODE BEGIN PFP */
 
-/* USER CODE END PFP */
 
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
+void GreenLED(GPIO_PinState State)
+{
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, State);
+}
+void BlueLED(GPIO_PinState State)
+{
+  HAL_GPIO_WritePin(GPIOB, LD2_Pin, State);
+}
+void RedLED(GPIO_PinState State)
+{
+  HAL_GPIO_WritePin(GPIOB, LD3_Pin, State);
+}
 
-/* USER CODE END 0 */
+
+#define APP_START_ADDRESS 0x08020000
+
+void jump_to_application(void)
+{
+    // Disable all interrupts
+    __disable_irq();
+
+    // Deinit peripherals here if needed (e.g., clocks, UART, timers)
+
+    // Clear pending interrupts
+    for (int i = 0; i < 8; i++) {
+        NVIC->ICER[i] = 0xFFFFFFFF;
+        NVIC->ICPR[i] = 0xFFFFFFFF;
+    }
+
+    // Set vector table to new app
+    SCB->VTOR = APP_START_ADDRESS;
+
+    // Set Main Stack Pointer
+    __set_MSP(*(volatile uint32_t *)APP_START_ADDRESS);
+
+    // Jump to application reset handler
+    uint32_t app_reset_handler = *(volatile uint32_t *)(APP_START_ADDRESS + 4);
+    void (*reset_handler)(void) = (void (*)(void))app_reset_handler;
+    reset_handler();
+}
+
+
+
 
 /**
   * @brief  The application entry point.
@@ -90,15 +127,16 @@ int main(void)
   MX_GPIO_Init();
   MX_LPUART1_UART_Init();
 
-  /* USER CODE BEGIN 3 */
-  // Set all LEDs on
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(GPIOB, LD2_Pin | LD3_Pin, GPIO_PIN_SET);
+  BlueLED(GPIO_PIN_SET);
 
   // Echo "Hello World"
-  char msg[] = "Hello World\r\n";
+  char msg[] = "Hurr Durr, I'm a Bootloader\r\n";
   HAL_UART_Transmit(&hlpuart1, (uint8_t*)msg, sizeof(msg)-1, HAL_MAX_DELAY);
 
+  jump_to_application();
+
+  ///Should never get here
+  
   while (1)
   {
   }
