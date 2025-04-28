@@ -147,8 +147,23 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 $(BUILD_DIR):
 	mkdir -p $@
 
+# Sign the image manually
+sign: $(BUILD_DIR)/$(TARGET)-signed.bin
+
+$(BUILD_DIR)/$(TARGET)-signed.bin: $(BUILD_DIR)/$(TARGET).bin
+	python3 ../mcuboot/scripts/imgtool.py sign \
+	  --header-size 0x200 \
+	  --align 8 \
+	  -S 0x20000 \
+	  -v 1.0.0 \
+	  --pad-header \
+	  $< $@
+	@echo "Signed image created: $@"
+
+
+
 # Imgtool signing
-SIGN_PYTHON := python
+SIGN_PYTHON := python3
 IMGTOOL_PY := $(ROOT_DIR)/mcuboot/scripts/imgtool.py
 
 SIGN_VERSION := 1.0.0
