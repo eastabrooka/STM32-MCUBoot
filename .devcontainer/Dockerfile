@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-# Install basic tools
+# Install basic tools and hexdump
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
@@ -15,7 +15,19 @@ RUN apt-get update && apt-get install -y \
     bash-completion \
     openssh-client \
     udev \
+    bsdmainutils \
     && apt-get clean
+
+# Install Python packages needed for imgtool
+RUN pip3 install --upgrade pip && \
+    pip3 install \
+    cryptography>=40.0.0 \
+    intelhex \
+    click \
+    cbor2 \
+    setuptools \
+    pyyaml \
+    pytest
 
 # Install ARM GCC toolchain
 RUN wget -q https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2 \

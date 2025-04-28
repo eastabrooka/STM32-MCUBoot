@@ -73,7 +73,6 @@ C_SOURCES = \
     $(COMMON_SRC_DIR)/root-ec-p256-pub.c \
     Core/Src/shell_port.c \
     Core/Src/shell.c \
-	$(COMMON_SRC_DIR)/root-ec-p256-pub.c \
     Core/Src/shell_commands.c \
     ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c \
     ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c \
