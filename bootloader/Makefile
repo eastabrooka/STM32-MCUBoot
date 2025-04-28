@@ -66,6 +66,24 @@ MCUBOOT_SRC_FILES += \
 # Also need mcuboot_config/ on path
 MCUBOOT_INC_PATHS := -I$(MCUBOOT_INC_DIR)
 
+TINYCRYPT_DIR := $(ROOT_DIR)/mcuboot/ext/tinycrypt/lib
+TINYCRYPT_SRC_DIR := $(TINYCRYPT_DIR)/source
+TINYCRYPT_INC_DIR := $(TINYCRYPT_DIR)/include
+
+TINYCRYPT_SRC_FILES += \
+  $(TINYCRYPT_SRC_DIR)/aes_decrypt.c \
+  $(TINYCRYPT_SRC_DIR)/aes_encrypt.c \
+  $(TINYCRYPT_SRC_DIR)/cbc_mode.c \
+  $(TINYCRYPT_SRC_DIR)/ccm_mode.c \
+  $(TINYCRYPT_SRC_DIR)/cmac_mode.c \
+  $(TINYCRYPT_SRC_DIR)/ctr_mode.c \
+  $(TINYCRYPT_SRC_DIR)/ctr_prng.c \
+  $(TINYCRYPT_SRC_DIR)/hmac.c \
+  $(TINYCRYPT_SRC_DIR)/hmac_prng.c \
+  $(TINYCRYPT_SRC_DIR)/sha256.c \
+  $(TINYCRYPT_SRC_DIR)/utils.c
+
+TINYCRYPT_INC_PATHS := -I$(TINYCRYPT_INC_DIR)
 
 
 C_SOURCES =  \
@@ -96,6 +114,9 @@ Core/Src/sysmem.c \
 Core/Src/syscalls.c  
 
 C_SOURCES += $(MCUBOOT_SRC_FILES)
+C_SOURCES += $(TINYCRYPT_SRC_FILES)
+
+
 
 
 # ASM sources
@@ -164,7 +185,7 @@ C_INCLUDES =  \
 
 # add mcuboot and common includes
 C_INCLUDES += $(MCUBOOT_INC_PATHS)
-
+C_INCLUDES += $(TINYCRYPT_INC_PATHS)
 C_INCLUDES += -I$(COMMON_INC_DIR)
 
 # compile gcc flags
