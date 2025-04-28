@@ -12,6 +12,6 @@
         "inttypes.h": "c",
         "logging.h": "c",
         "shell_port.h": "c",
-        "sysflash.h": "c"
+        "mcuboot_logging.h": "c"
     }
 }

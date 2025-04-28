@@ -15,8 +15,8 @@
 
 
 #define BOOTLOADER_START_ADDRESS 0x0
-#define BOOTLOADER_SIZE (128 * 1024)
-#define APPLICATION_PRIMARY_START_ADDRESS (128 * 1024)
+#define BOOTLOADER_SIZE (32 * 1024)
+#define APPLICATION_PRIMARY_START_ADDRESS (32 * 1024)
 #define APPLICATION_SECONDARY_START_ADDRESS (APPLICATION_PRIMARY_START_ADDRESS + APPLICATION_SIZE)
 #define APPLICATION_SIZE (128 * 1024)
 
@@ -89,9 +89,9 @@ void flash_area_close(const struct flash_area *fa) {
 // Flash Property Dependencies
 //
 
-#define FLASH_SECTOR_SIZE 2048U         
+#define FLASH_SECTOR_SIZE 4096
 
-size_t flash_area_align(const struct flash_area *area) {
+uint32_t flash_area_align(const struct flash_area *area) {
   // the smallest unit a flash write can occur along
   return 4;
 }
