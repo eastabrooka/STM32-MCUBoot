@@ -18,9 +18,7 @@ MCUBOOT_DIR := $(ROOT_DIR)/mcuboot/boot/bootutil
 MCUBOOT_SRC_DIR := $(MCUBOOT_DIR)/src
 MCUBOOT_INC_DIR := $(MCUBOOT_DIR)/include
 
-TINYCRYPT_DIR := $(ROOT_DIR)/mcuboot/ext/tinycrypt/lib
-TINYCRYPT_SRC_DIR := $(TINYCRYPT_DIR)/source
-TINYCRYPT_INC_DIR := $(TINYCRYPT_DIR)/include
+MBEDTLS_DIR := $(ROOT_DIR)/mcuboot/ext/mbedtls/library
 
 IMGTOOL_PY := $(ROOT_DIR)/mcuboot/scripts/imgtool.py
 IMG_SIGN_KEY := $(ROOT_DIR)/mcuboot/root-ec-p256.pem
@@ -33,12 +31,15 @@ SZ = $(PREFIX)size
 HEX = $(CP) -O ihex
 BIN = $(CP) -O binary -S
 
+# CPU and MCU settings
 CPU = -mcpu=cortex-m4
 FPU = -mfpu=fpv4-sp-d16
 FLOAT-ABI = -mfloat-abi=hard
 MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 
-CFLAGS = $(MCU) -Wall -fdata-sections -ffunction-sections $(OPT)
+# Flags
+CFLAGS =
+CFLAGS += $(MCU) -Wall -fdata-sections -ffunction-sections $(OPT)
 CFLAGS += -DUSE_HAL_DRIVER -DSTM32L4A6xx
 CFLAGS += -ICore/Inc
 CFLAGS += -I../Drivers/STM32L4xx_HAL_Driver/Inc
@@ -47,7 +48,7 @@ CFLAGS += -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include
 CFLAGS += -I../Drivers/CMSIS/Include
 CFLAGS += -I$(COMMON_INC_DIR)
 CFLAGS += -I$(MCUBOOT_INC_DIR)
-CFLAGS += -I$(TINYCRYPT_INC_DIR)
+CFLAGS += -I$(ROOT_DIR)/mcuboot/ext/mbedtls/include
 
 ifeq ($(DEBUG),1)
 CFLAGS += -g -gdwarf-2
@@ -57,16 +58,19 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 
 ASFLAGS = $(CFLAGS)
 
+# Linker
 LDSCRIPT = STM32L4A6ZGTx_FLASH.ld
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 LIBS = -lc -lm -lnosys
 
+# Sources
 C_SOURCES = \
     Core/Src/main.c \
     Core/Src/stm32l4xx_it.c \
     Core/Src/stm32l4xx_hal_msp.c \
     Core/Src/log_port.c \
     $(COMMON_SRC_DIR)/mcuboot_port.c \
+    $(COMMON_SRC_DIR)/root-ec-p256-pub.c \
     Core/Src/shell_port.c \
     Core/Src/shell.c \
 	$(COMMON_SRC_DIR)/root-ec-p256-pub.c \
@@ -110,12 +114,21 @@ C_SOURCES = \
     $(MCUBOOT_SRC_DIR)/image_ed25519.c \
     $(MCUBOOT_SRC_DIR)/swap_offset.c \
     $(MCUBOOT_SRC_DIR)/encrypted.c \
-    $(TINYCRYPT_SRC_DIR)/ecc.c \
-    $(TINYCRYPT_SRC_DIR)/sha256.c \
-    $(TINYCRYPT_SRC_DIR)/utils.c
+    $(MBEDTLS_DIR)/asn1parse.c \
+    $(MBEDTLS_DIR)/asn1write.c \
+    $(MBEDTLS_DIR)/ecp.c \
+    $(MBEDTLS_DIR)/ecp_curves.c \
+    $(MBEDTLS_DIR)/error.c \
+    $(MBEDTLS_DIR)/oid.c \
+    $(MBEDTLS_DIR)/pk.c \
+    $(MBEDTLS_DIR)/sha256.c \
+    $(MBEDTLS_DIR)/bignum.c \
+    $(MBEDTLS_DIR)/ecdsa.c \
+    $(MBEDTLS_DIR)/platform_util.c
 
 ASM_SOURCES = startup_stm32l4a6xx.s
 
+# Objects
 OBJECTS = $(addprefix $(BUILD_DIR)/, $(notdir $(C_SOURCES:.c=.o) $(ASM_SOURCES:.s=.o)))
 
 vpath %.c $(sort $(dir $(C_SOURCES)))
