@@ -38,6 +38,8 @@ BUILD_DIR = build
 
 ROOT_DIR := $(abspath ..)
 
+COMMON_DIR := $(ROOT_DIR)/common
+COMMON_INC_DIR := $(COMMON_DIR)/include
 
 MCUBOOT_DIR := $(ROOT_DIR)/mcuboot/boot/bootutil
 MCUBOOT_SRC_DIR := $(MCUBOOT_DIR)/src
@@ -160,9 +162,8 @@ C_INCLUDES =  \
 -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include \
 -I../Drivers/CMSIS/Include
 
-C_INCLUDES += $(MCUBOOT_INC_PATHS)
-
-
+C_INCLUDES += $(addprefix -I,$(MCUBOOT_INC_PATHS))
+C_INCLUDES += $(addprefix -I,$(COMMON_INC_DIR))
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
@@ -225,6 +226,17 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	
 $(BUILD_DIR):
 	mkdir $@		
+
+.PHONY: show-dirs
+show-dirs:
+	@echo "ROOT_DIR       = $(ROOT_DIR)"
+	@echo "COMMON_DIR     = $(COMMON_DIR)"
+	@echo "MCUBOOT_DIR    = $(MCUBOOT_DIR)"
+	@echo "MCUBOOT_SRC_DIR= $(MCUBOOT_SRC_DIR)"
+	@echo "MCUBOOT_INC_DIR= $(MCUBOOT_INC_DIR)"
+	@echo "COMMON_INC_DIR= $(COMMON_INC_DIR)"
+
+
 
 #######################################
 # clean up
