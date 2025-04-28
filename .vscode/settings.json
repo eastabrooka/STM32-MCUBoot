@@ -9,6 +9,8 @@
         "stm32l4xx_hal_def.h": "c",
         "image.h": "c",
         "uart.h": "c",
-        "inttypes.h": "c"
+        "inttypes.h": "c",
+        "logging.h": "c",
+        "shell_port.h": "c"
     }
 }

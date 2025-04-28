@@ -3,12 +3,9 @@
 //! A port of the tiny shell to a baremetal NRF52 system using the UART as a console
 
 #include "shell_port.h"
-
 #include <stdbool.h>
 #include <stddef.h>
-
-#include "cmsis_shim.h"
-#include "hal/uart.h"
+#include "uart.h"
 #include "shell/shell.h"
 
 static volatile struct {
@@ -44,7 +41,8 @@ bool shell_port_getchar(char *c_out) {
 }
 
 static int prv_console_putc(char c) {
-  uart_tx_blocking(&c, sizeof(c));
+  //uart_tx_blocking(&c, sizeof(c));
+  printf("%c",c);
   return 1;
 }
 
@@ -55,9 +53,10 @@ void shell_processing_loop(void) {
   shell_boot(&shell_impl);
 
   while (1) {
-    char c;
-    if (shell_port_getchar(&c)) {
-      shell_receive_char(c);
-    }
+    int ch = Serial_ReadChar(); 
+    if (ch >= 0) { 
+      shell_receive_char(ch);
+    } 
+
   }
 }

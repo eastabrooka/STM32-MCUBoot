@@ -70,6 +70,9 @@ C_SOURCES = \
     Core/Src/stm32l4xx_hal_msp.c \
 	Core/Src/log_port.c \
 	$(COMMON_SRC_DIR)/mcuboot_port.c  \
+    Core/Src/shell_port.c \
+    Core/Src/shell.c \
+    Core/Src/shell_commands.c \
     ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c \
     ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c \
     ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c \

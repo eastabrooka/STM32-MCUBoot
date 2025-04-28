@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "hal/logging.h"
+#include "logging.h"
 #include "bootutil/bootutil.h"
 
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))

@@ -131,16 +131,6 @@ int main(void)
   char msg[] = "Hurr Durr, I'm a Bootloader\r\n";
   HAL_UART_Transmit(&hlpuart1, (uint8_t*)msg, sizeof(msg)-1, HAL_MAX_DELAY);
 
-  printf("Also, About to be in Loopback Mode for a test.\r\n");
-
-  for(;;)
-  {
-    int ch = Serial_ReadChar();
-    if (ch >= 0) {
-        printf("%c",ch);
-    }
-  }
-
   EXAMPLE_LOG("\n\n___  ________ _   _ _                 _   ");
   EXAMPLE_LOG("|  \\/  /  __ \\ | | | |               | |  ");
   EXAMPLE_LOG("| .  . | /  \\/ | | | |__   ___   ___ | |_ ");
@@ -429,23 +419,3 @@ static void do_boot(struct boot_rsp *rsp) {
   start_app(app_start, app_sp);
 }
 
-
-
-
-
-
-// Stubs for now 
-
-void shell_processing_loop(void)
-{
-    while (1) {
-        // empty for now
-    }
-}
-
-void uart_tx_blocking(const void *data, size_t len)
-{
-    (void)data;
-    (void)len;
-    // do nothing for now
-}
