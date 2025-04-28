@@ -127,11 +127,6 @@ int main(void)
   char msg[] = "Hurr Durr, I'm a Bootloader\r\n";
   HAL_UART_Transmit(&hlpuart1, (uint8_t*)msg, sizeof(msg)-1, HAL_MAX_DELAY);
 
-  jump_to_application();
-
-  ///Should never get here
-  
-
   EXAMPLE_LOG("\n\n___  ________ _   _ _                 _   ");
   EXAMPLE_LOG("|  \\/  /  __ \\ | | | |               | |  ");
   EXAMPLE_LOG("| .  . | /  \\/ | | | |__   ___   ___ | |_ ");
@@ -151,8 +146,6 @@ int main(void)
   EXAMPLE_LOG("No bootable image found. Falling into Bootloader CLI:");
 
   shell_processing_loop();
-
-
   
   while (1)
   {
@@ -236,8 +229,14 @@ static void MX_LPUART1_UART_Init(void)
   /* USER CODE BEGIN LPUART1_Init 2 */
 
   /* USER CODE END LPUART1_Init 2 */
-
 }
+
+int _write(int file, char *ptr, int len)
+{
+    HAL_UART_Transmit(&hlpuart1, (uint8_t *)ptr, len, HAL_MAX_DELAY);
+    return len;
+}
+
 
 /**
   * @brief GPIO Initialization Function

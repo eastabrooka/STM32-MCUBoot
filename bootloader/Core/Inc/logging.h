@@ -1,8 +1,9 @@
 #pragma once
 
-void example_log(const char *fmt, ...);
+#include <stdio.h>
 
 #define EXAMPLE_LOG(...)                            \
   do {                                              \
-    example_log(__VA_ARGS__);                       \
+    printf(__VA_ARGS__);                            \
+    printf("\r\n");                                 \
   } while (0)
