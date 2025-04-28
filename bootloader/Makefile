@@ -22,6 +22,7 @@ TINYCRYPT_INC_DIR := $(TINYCRYPT_DIR)/include
 SRC_FILES := \
     $(PROJECT_DIR)/main.c \
     $(PROJECT_DIR)/mcuboot_port.c \
+    $(PROJECT_DIR)/serial_interface.c \
     $(PROJECT_DIR)/startup_stm32l4a6xx.s \
     $(PROJECT_DIR)/system_stm32l4xx.c \
     $(PROJECT_DIR)/flash_map_backend/flash_map.c \
@@ -63,7 +64,9 @@ INCLUDE_PATHS := \
     -I$(TINYCRYPT_INC_DIR) \
     -I$(MCUBOOT_INC_DIR) \
     -I$(CMSIS_CORE_INC) \
-    -I$(CMSIS_DEV_INC)
+    -I$(CMSIS_DEV_INC) \
+    -I$(ROOT_DIR)/cmsis/CMSIS/Core/Include \
+    -I$(ROOT_DIR)/cmsis/CMSIS/Device/ST/STM32L4xx/Include
 
 # Compiler flags
 CFLAGS := \
