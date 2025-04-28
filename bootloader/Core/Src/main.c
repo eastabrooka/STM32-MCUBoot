@@ -60,6 +60,41 @@ void RedLED(GPIO_PinState State)
 }
 
 
+
+int read_flash() {
+  const struct flash_area *fa;
+  int res = flash_area_open(0, &fa);  // Open primary flash area
+  if (res != 0) {
+      printf("Failed to open flash area\n");
+      return -1;
+  }
+
+  // Check if the offset and length are within bounds
+  uint32_t read_offset = 0;
+  uint32_t read_length = 256;
+  if (read_offset + read_length > fa->fa_size) {
+      printf("Read out of bounds\n");
+      flash_area_close(fa);
+      return -1;
+  }
+
+  uint8_t buffer[256];  // Buffer to hold read data
+  res = flash_area_read(fa, read_offset, buffer, read_length);
+  if (res != 0) {
+      printf("Flash read failed\n");
+  } else {
+      printf("Flash read succeeded\n");
+      // Optionally, print the buffer content to verify
+      for (int i = 0; i < 256; i++) {
+          printf("%02X ", buffer[i]);
+      }
+  }
+
+  flash_area_close(fa);  // Don't forget to close the area
+  return res;
+}
+
+
 #define APP_START_ADDRESS 0x08020000
 
 void jump_to_application(void)
@@ -131,6 +166,8 @@ int main(void)
   char msg[] = "Hurr Durr, I'm a Bootloader\r\n";
   HAL_UART_Transmit(&hlpuart1, (uint8_t*)msg, sizeof(msg)-1, HAL_MAX_DELAY);
 
+  read_flash();
+  
   EXAMPLE_LOG("\n\n___  ________ _   _ _                 _   ");
   EXAMPLE_LOG("|  \\/  /  __ \\ | | | |               | |  ");
   EXAMPLE_LOG("| .  . | /  \\/ | | | |__   ___   ___ | |_ ");

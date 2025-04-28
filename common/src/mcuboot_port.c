@@ -7,9 +7,9 @@
 #include "mcuboot_config/mcuboot_logging.h"
 #include "mcuboot_config/mcuboot_assert.h"
 
-#define FLASH_BASE_ADDRESS 0x08000000U
+#define FLASH_BASE_ADDRESS 0x0000000U
 #define FLASH_BOOTLOADER_SIZE (128 * 1024) // 128KB
-#define FLASH_APP_SLOT_SIZE (256 * 1024)   // Adjust if needed
+#define FLASH_APP_SLOT_SIZE (256 * 512)   // Adjust if needed
 #define FLASH_PAGE_SIZE 2048U              // STM32L4 typical
 
 // Dummy flash area definitions
