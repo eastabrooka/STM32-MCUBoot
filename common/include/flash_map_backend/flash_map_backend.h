@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stddef.h>
+#include <string.h>
 #include <inttypes.h>
 
 struct flash_area {
