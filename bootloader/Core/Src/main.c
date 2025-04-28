@@ -42,7 +42,7 @@ UART_HandleTypeDef hlpuart1;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_LPUART1_UART_Init(void);
-
+int Serial_ReadChar(void);
 static void do_boot(struct boot_rsp *rsp);
 
 
@@ -105,7 +105,7 @@ int main(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
+  setvbuf(stdout, NULL, _IONBF, 0);  // <--- Add this line here
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
@@ -120,12 +120,26 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_LPUART1_UART_Init();
+  
+  //Turn RX IN on for UART
+  HAL_NVIC_SetPriority(LPUART1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(LPUART1_IRQn);
 
   BlueLED(GPIO_PIN_SET);
 
   // Echo "Hello World"
   char msg[] = "Hurr Durr, I'm a Bootloader\r\n";
   HAL_UART_Transmit(&hlpuart1, (uint8_t*)msg, sizeof(msg)-1, HAL_MAX_DELAY);
+
+  printf("Also, About to be in Loopback Mode for a test.\r\n");
+
+  for(;;)
+  {
+    int ch = Serial_ReadChar();
+    if (ch >= 0) {
+        printf("%c",ch);
+    }
+  }
 
   EXAMPLE_LOG("\n\n___  ________ _   _ _                 _   ");
   EXAMPLE_LOG("|  \\/  /  __ \\ | | | |               | |  ");
@@ -198,37 +212,63 @@ void SystemClock_Config(void)
   }
 }
 
-/**
-  * @brief LPUART1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_LPUART1_UART_Init(void)
+
+#define RX_BUFFER_SIZE 128
+volatile uint8_t rx_buffer[RX_BUFFER_SIZE];
+volatile uint16_t rx_head = 0;
+volatile uint16_t rx_tail = 0;
+static uint8_t rx_byte;  // temp storage for each received byte
+
+void MX_LPUART1_UART_Init(void)
 {
+    hlpuart1.Instance = LPUART1;
+    hlpuart1.Init.BaudRate = 115200;
+    hlpuart1.Init.WordLength = UART_WORDLENGTH_8B;
+    hlpuart1.Init.StopBits = UART_STOPBITS_1;
+    hlpuart1.Init.Parity = UART_PARITY_NONE;
+    hlpuart1.Init.Mode = UART_MODE_TX_RX;
+    hlpuart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    hlpuart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+    hlpuart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+    HAL_UART_Init(&hlpuart1);
 
-  /* USER CODE BEGIN LPUART1_Init 0 */
+    // Start first receive interrupt
+    HAL_UART_Receive_IT(&hlpuart1, &rx_byte, 1);
+}
 
-  /* USER CODE END LPUART1_Init 0 */
+// This function is called by HAL when a UART receive interrupt happens
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if (huart->Instance == LPUART1)
+    {
+        uint16_t next_head = (rx_head + 1) % RX_BUFFER_SIZE;
 
-  /* USER CODE BEGIN LPUART1_Init 1 */
+        if (next_head != rx_tail) // buffer not full
+        {
+            rx_buffer[rx_head] = rx_byte;
+            rx_head = next_head;
+        }
+        // else: buffer full, you can handle overflow here if needed
 
-  /* USER CODE END LPUART1_Init 1 */
-  hlpuart1.Instance = LPUART1;
-  hlpuart1.Init.BaudRate = 115200;
-  hlpuart1.Init.WordLength = UART_WORDLENGTH_8B;
-  hlpuart1.Init.StopBits = UART_STOPBITS_1;
-  hlpuart1.Init.Parity = UART_PARITY_NONE;
-  hlpuart1.Init.Mode = UART_MODE_TX_RX;
-  hlpuart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  hlpuart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  hlpuart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&hlpuart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN LPUART1_Init 2 */
+        // Restart interrupt reception
+        HAL_UART_Receive_IT(&hlpuart1, &rx_byte, 1);
+    }
+}
 
-  /* USER CODE END LPUART1_Init 2 */
+// Optional: helper function to read from the buffer
+int Serial_ReadChar(void)
+{
+    if (rx_head == rx_tail)
+    {
+        return -1; // No data available
+    }
+    uint8_t ch = rx_buffer[rx_tail];
+    rx_tail = (rx_tail + 1) % RX_BUFFER_SIZE;
+    return ch;
+}
+void LPUART1_IRQHandler(void)
+{
+    HAL_UART_IRQHandler(&hlpuart1);
 }
 
 int _write(int file, char *ptr, int len)
@@ -283,6 +323,21 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+
+
+  GPIO_InitStruct.Pin = GPIO_PIN_7;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = GPIO_AF8_LPUART1;
+  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+
+  GPIO_InitStruct.Pin = GPIO_PIN_8;
+  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+
+
+
+  
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
 }
