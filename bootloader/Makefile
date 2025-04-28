@@ -46,22 +46,26 @@ MCUBOOT_SRC_DIR := $(MCUBOOT_DIR)/src
 MCUBOOT_INC_DIR := $(MCUBOOT_DIR)/include
 
 MCUBOOT_SRC_FILES += \
-  $(MCUBOOT_SRC_DIR)/boot_record.c \
-  $(MCUBOOT_SRC_DIR)/bootutil_misc.c \
   $(MCUBOOT_SRC_DIR)/caps.c \
-  $(MCUBOOT_SRC_DIR)/encrypted.c \
-  $(MCUBOOT_SRC_DIR)/fault_injection_hardening.c \
-  $(MCUBOOT_SRC_DIR)/fault_injection_hardening_delay_rng_mbedtls.c \
-  $(MCUBOOT_SRC_DIR)/image_ec.c \
-  $(MCUBOOT_SRC_DIR)/image_ec256.c \
-  $(MCUBOOT_SRC_DIR)/image_ed25519.c \
-  $(MCUBOOT_SRC_DIR)/image_rsa.c \
-  $(MCUBOOT_SRC_DIR)/image_validate.c \
   $(MCUBOOT_SRC_DIR)/loader.c \
-  $(MCUBOOT_SRC_DIR)/swap_misc.c \
-  $(MCUBOOT_SRC_DIR)/swap_move.c \
+  $(MCUBOOT_SRC_DIR)/image_rsa.c \
   $(MCUBOOT_SRC_DIR)/swap_scratch.c \
-  $(MCUBOOT_SRC_DIR)/tlv.c
+  $(MCUBOOT_SRC_DIR)/ram_load.c \
+  $(MCUBOOT_SRC_DIR)/fault_injection_hardening.c \
+  $(MCUBOOT_SRC_DIR)/image_ecdsa.c \
+  $(MCUBOOT_SRC_DIR)/boot_record.c \
+  $(MCUBOOT_SRC_DIR)/bootutil_public.c \
+  $(MCUBOOT_SRC_DIR)/tlv.c \
+  $(MCUBOOT_SRC_DIR)/ed25519_psa.c \
+  $(MCUBOOT_SRC_DIR)/image_validate.c \
+  $(MCUBOOT_SRC_DIR)/bootutil_misc.c \
+  $(MCUBOOT_SRC_DIR)/fault_injection_hardening_delay_rng_mbedtls.c \
+  $(MCUBOOT_SRC_DIR)/swap_move.c \
+  $(MCUBOOT_SRC_DIR)/swap_misc.c \
+  $(MCUBOOT_SRC_DIR)/image_ed25519.c \
+  $(MCUBOOT_SRC_DIR)/swap_offset.c \
+  $(MCUBOOT_SRC_DIR)/encrypted.c \
+  $(MCUBOOT_SRC_DIR)/encrypted_psa.c
 
 # Also need mcuboot_config/ on path
 MCUBOOT_INC_PATHS := -I$(MCUBOOT_INC_DIR)
@@ -71,17 +75,26 @@ TINYCRYPT_SRC_DIR := $(TINYCRYPT_DIR)/source
 TINYCRYPT_INC_DIR := $(TINYCRYPT_DIR)/include
 
 TINYCRYPT_SRC_FILES += \
-  $(TINYCRYPT_SRC_DIR)/aes_decrypt.c \
-  $(TINYCRYPT_SRC_DIR)/aes_encrypt.c \
-  $(TINYCRYPT_SRC_DIR)/cbc_mode.c \
-  $(TINYCRYPT_SRC_DIR)/ccm_mode.c \
-  $(TINYCRYPT_SRC_DIR)/cmac_mode.c \
-  $(TINYCRYPT_SRC_DIR)/ctr_mode.c \
-  $(TINYCRYPT_SRC_DIR)/ctr_prng.c \
-  $(TINYCRYPT_SRC_DIR)/hmac.c \
-  $(TINYCRYPT_SRC_DIR)/hmac_prng.c \
-  $(TINYCRYPT_SRC_DIR)/sha256.c \
-  $(TINYCRYPT_SRC_DIR)/utils.c
+  $(TINYCRYPT_SRC_DIR)/caps.c \
+  $(TINYCRYPT_SRC_DIR)/loader.c \
+  $(TINYCRYPT_SRC_DIR)/image_rsa.c \
+  $(TINYCRYPT_SRC_DIR)/swap_scratch.c \
+  $(TINYCRYPT_SRC_DIR)/ram_load.c \
+  $(TINYCRYPT_SRC_DIR)/fault_injection_hardening.c \
+  $(TINYCRYPT_SRC_DIR)/image_ecdsa.c \
+  $(TINYCRYPT_SRC_DIR)/boot_record.c \
+  $(TINYCRYPT_SRC_DIR)/bootutil_public.c \
+  $(TINYCRYPT_SRC_DIR)/tlv.c \
+  $(TINYCRYPT_SRC_DIR)/ed25519_psa.c \
+  $(TINYCRYPT_SRC_DIR)/image_validate.c \
+  $(TINYCRYPT_SRC_DIR)/bootutil_misc.c \
+  $(TINYCRYPT_SRC_DIR)/fault_injection_hardening_delay_rng_mbedtls.c \
+  $(TINYCRYPT_SRC_DIR)/swap_move.c \
+  $(TINYCRYPT_SRC_DIR)/swap_misc.c \
+  $(TINYCRYPT_SRC_DIR)/image_ed25519.c \
+  $(TINYCRYPT_SRC_DIR)/swap_offset.c \
+  $(TINYCRYPT_SRC_DIR)/encrypted.c \
+  $(TINYCRYPT_SRC_DIR)/encrypted_psa.c
 
 TINYCRYPT_INC_PATHS := -I$(TINYCRYPT_INC_DIR)
 
