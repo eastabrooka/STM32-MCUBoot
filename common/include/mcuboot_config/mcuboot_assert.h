@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hal/logging.h"
+#include "logging.h"
 
 extern void example_assert_handler(const char *file, int line);
 

@@ -162,8 +162,10 @@ C_INCLUDES =  \
 -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include \
 -I../Drivers/CMSIS/Include
 
-C_INCLUDES += $(addprefix -I,$(MCUBOOT_INC_PATHS))
-C_INCLUDES += $(addprefix -I,$(COMMON_INC_DIR))
+# add mcuboot and common includes
+C_INCLUDES += $(MCUBOOT_INC_PATHS)
+
+C_INCLUDES += -I$(COMMON_INC_DIR)
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections

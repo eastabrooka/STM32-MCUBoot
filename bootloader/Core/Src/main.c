@@ -43,6 +43,8 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_LPUART1_UART_Init(void);
 
+static void do_boot(struct boot_rsp *rsp);
+
 
 void GreenLED(GPIO_PinState State)
 {
@@ -128,6 +130,29 @@ int main(void)
   jump_to_application();
 
   ///Should never get here
+  
+
+  EXAMPLE_LOG("\n\n___  ________ _   _ _                 _   ");
+  EXAMPLE_LOG("|  \\/  /  __ \\ | | | |               | |  ");
+  EXAMPLE_LOG("| .  . | /  \\/ | | | |__   ___   ___ | |_ ");
+  EXAMPLE_LOG("| |\\/| | |   | | | | '_ \\ / _ \\ / _ \\| __|");
+  EXAMPLE_LOG("| |  | | \\__/\\ |_| | |_) | (_) | (_) | |_ ");
+  EXAMPLE_LOG("\\_|  |_/\\____/\\___/|_.__/ \\___/ \\___/ \\__|");
+
+  EXAMPLE_LOG("==Starting Bootloader==");
+
+  struct boot_rsp rsp;
+  int rv = boot_go(&rsp);
+
+  if (rv == 0) {
+    do_boot(&rsp);
+  }
+
+  EXAMPLE_LOG("No bootable image found. Falling into Bootloader CLI:");
+
+  shell_processing_loop();
+
+
   
   while (1)
   {
@@ -366,33 +391,3 @@ static void do_boot(struct boot_rsp *rsp) {
 
   start_app(app_start, app_sp);
 }
-
-int main(void) {
-  prv_enable_vfp();
-  uart_boot();
-
-  // because a bootloader is a good opportunity for a little ASCII art!
-  EXAMPLE_LOG("\n\n___  ________ _   _ _                 _   ");
-  EXAMPLE_LOG("|  \\/  /  __ \\ | | | |               | |  ");
-  EXAMPLE_LOG("| .  . | /  \\/ | | | |__   ___   ___ | |_ ");
-  EXAMPLE_LOG("| |\\/| | |   | | | | '_ \\ / _ \\ / _ \\| __|");
-  EXAMPLE_LOG("| |  | | \\__/\\ |_| | |_) | (_) | (_) | |_ ");
-  EXAMPLE_LOG("\\_|  |_/\\____/\\___/|_.__/ \\___/ \\___/ \\__|");
-
-  EXAMPLE_LOG("==Starting Bootloader==");
-
-  struct boot_rsp rsp;
-  int rv = boot_go(&rsp);
-
-  if (rv == 0) {
-    do_boot(&rsp);
-  }
-
-  EXAMPLE_LOG("No bootable image found. Falling into Bootloader CLI:");
-
-  shell_processing_loop();
-
-  __builtin_unreachable();
-}
-
-

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hal/logging.h"
+#include "logging.h"
 
 #define MCUBOOT_LOG_MODULE_DECLARE(...)
 
