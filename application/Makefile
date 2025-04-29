@@ -21,7 +21,7 @@ MCUBOOT_INC_DIR := $(MCUBOOT_DIR)/include
 MBEDTLS_DIR := $(ROOT_DIR)/mcuboot/ext/mbedtls/library
 
 IMGTOOL_PY := $(ROOT_DIR)/mcuboot/scripts/imgtool.py
-IMG_SIGN_KEY := $(ROOT_DIR)/mcuboot/root-ec-p256.pem
+IMG_SIGN_KEY := $(ROOT_DIR)/DebugKeys/root-ec-p256.pem
 
 PREFIX = arm-none-eabi-
 CC = $(PREFIX)gcc
