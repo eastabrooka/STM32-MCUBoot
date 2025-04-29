@@ -55,3 +55,19 @@ Goals
 ✅ Use pure Makefiles and GCC, no extra bloat.
 
 ✅ Build something simple first, then add security later if needed.
+
+
+
+----------------------------------
+
+imgtool.py keygen -k root-ec-p256.pem -t ecdsa-p256
+
+This root-ec-p256.pem file is your secret key.
+
+python3 imgtool.py getpub -k root-ec-p256.pem > root-ec-p256-pub.c
+
+This root-ec-p256-pub.c is a C file.
+
+You compile this into MCUboot.
+
+It defines a struct like bootutil_keys.c with the public key inside.

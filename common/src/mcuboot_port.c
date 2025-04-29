@@ -24,13 +24,10 @@
 
 #define APPLICATION_SECONDARY_START_ADDRESS (APPLICATION_PRIMARY_START_ADDRESS + APPLICATION_SIZE)
 
-//
-// Flash sectors
-//
+#define SCRATCH_START_ADDRESS (APPLICATION_SECONDARY_START_ADDRESS + APPLICATION_SIZE)
+#define SCRATCH_SIZE (16 * 1024) // 16KB scratch area
 
 #define FLASH_SECTOR_SIZE 2048U // 2KB sectors for STM32L4
-//#define FLASH_SECTOR_SIZE 4096U // 4KB sectors for STM32L4A6
-
 //
 // Flash areas
 //
@@ -56,10 +53,18 @@ static const struct flash_area secondary_img0 = {
     .fa_size = APPLICATION_SIZE,
 };
 
+static const struct flash_area scratch = {
+    .fa_id = FLASH_AREA_IMAGE_SCRATCH,
+    .fa_device_id = FLASH_DEVICE_INTERNAL_FLASH,
+    .fa_off = SCRATCH_START_ADDRESS,
+    .fa_size = SCRATCH_SIZE,
+};
+
 static const struct flash_area *s_flash_areas[] = {
     &bootloader,
     &primary_img0,
     &secondary_img0,
+    &scratch,
 };
 
 //
