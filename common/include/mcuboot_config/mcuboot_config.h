@@ -13,7 +13,7 @@
 #define MCUBOOT_SWAP_USING_MOVE           1
 
 // === Validation ===
-#define MCUBOOT_VALIDATE_PRIMARY_SLOT     1
+#define MCUBOOT_VALIDATE_PRIMARY_SLOT     0
 #define MCUBOOT_IMAGE_NUMBER              1
 #define MCUBOOT_MAX_IMG_SECTORS           256
 
