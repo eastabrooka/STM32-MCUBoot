@@ -27,6 +27,8 @@
 #include "bootutil/bootutil.h"
 #include "bootutil/image.h"
 
+#include "bootutil/sign_key.h"
+
 
 #include <string.h>
 
@@ -61,38 +63,6 @@ void RedLED(GPIO_PinState State)
 
 
 
-int read_flash() {
-  const struct flash_area *fa;
-  int res = flash_area_open(0, &fa);  // Open primary flash area
-  if (res != 0) {
-      printf("Failed to open flash area\n");
-      return -1;
-  }
-
-  // Check if the offset and length are within bounds
-  uint32_t read_offset = 0;
-  uint32_t read_length = 256;
-  if (read_offset + read_length > fa->fa_size) {
-      printf("Read out of bounds\n");
-      flash_area_close(fa);
-      return -1;
-  }
-
-  uint8_t buffer[256];  // Buffer to hold read data
-  res = flash_area_read(fa, read_offset, buffer, read_length);
-  if (res != 0) {
-      printf("Flash read failed\n");
-  } else {
-      printf("Flash read succeeded\n");
-      // Optionally, print the buffer content to verify
-      for (int i = 0; i < 256; i++) {
-          printf("%02X ", buffer[i]);
-      }
-  }
-
-  flash_area_close(fa);  // Don't forget to close the area
-  return res;
-}
 
 
 #define APP_START_ADDRESS 0x08020000
@@ -123,26 +93,21 @@ void jump_to_application(void)
 }
 
 
+extern const struct bootutil_key bootutil_keys[];
+extern const int bootutil_key_cnt;
 
-void try_erase_bank2_page0(void) {
-  HAL_FLASH_Unlock();
+#include <stdio.h>  // also add at the top
 
-  FLASH_EraseInitTypeDef erase_init = {0};
-  uint32_t page_error = 0;
+__attribute__((constructor)) void check_key_at_boot(void) {
+    extern const struct bootutil_key bootutil_keys[];
+    extern const int bootutil_key_cnt;
 
-  erase_init.TypeErase = FLASH_TYPEERASE_PAGES;
-  erase_init.Banks = FLASH_BANK_2;
-  erase_init.Page = 0; // First page of Bank 2 (0x08040000)
-  erase_init.NbPages = 1;
-
-  if (HAL_FLASHEx_Erase(&erase_init, &page_error) != HAL_OK) {
-      printf("Manual Erase failed. Page error = 0x%08lX\n", page_error);
-  } else {
-      printf("Manual Erase OK at Bank 2 Page 0\n");
-  }
-
-  HAL_FLASH_Lock();
+    printf("bootutil_keys[0].len = %d\n", bootutil_keys[0].len);
+    printf("bootutil_keys[0].key[0..3] = %02x %02x %02x %02x\n",
+           bootutil_keys[0].key[0], bootutil_keys[0].key[1],
+           bootutil_keys[0].key[2], bootutil_keys[0].key[3]);
 }
+
 
 
 /**
@@ -186,10 +151,8 @@ int main(void)
   char msg[] = "Hurr Durr, I'm a Bootloader.\r\n";
   HAL_UART_Transmit(&hlpuart1, (uint8_t*)msg, sizeof(msg)-1, HAL_MAX_DELAY);
 
-  printf("Attempting Erase \n");
-  try_erase_bank2_page0();
+  check_key_at_boot();
 
-  
   EXAMPLE_LOG("\n\r___  ________ _   _ _                 _   ");
   EXAMPLE_LOG("|  \\/  /  __ \\ | | | |               | |  ");
   EXAMPLE_LOG("| .  . | /  \\/ | | | |__   ___   ___ | |_ ");

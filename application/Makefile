@@ -128,7 +128,7 @@ vpath %.c $(sort $(dir $(C_SOURCES)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
 # Build rules
-all: $(BUILD_DIR)/$(TARGET)-signed.bin
+all: $(BUILD_DIR)/$(TARGET)-signed-confirmed.hex
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@ 
@@ -144,8 +144,24 @@ $(BUILD_DIR)/$(TARGET).bin: $(BUILD_DIR)/$(TARGET).elf | $(BUILD_DIR)
 	$(BIN) $< $@
 
 $(BUILD_DIR)/$(TARGET)-signed.bin: $(BUILD_DIR)/$(TARGET).bin
-	python3 $(IMGTOOL_PY) sign --key $(IMG_SIGN_KEY) --header-size 0x200 --align 8 -S 0x20000 --pad --pad-header -v 1.0.0 $< $@
+	python3 $(IMGTOOL_PY) sign --key $(IMG_SIGN_KEY) --header-size 0x200 --align 8 -S 0x20000 --pad --pad-header  --confirm  -v 1.0.0 $< $@
 
+
+# Confirmed signed BIN
+$(BUILD_DIR)/$(TARGET)-signed-confirmed.bin: $(BUILD_DIR)/$(TARGET).bin
+	python3 $(IMGTOOL_PY) sign \
+		--key $(IMG_SIGN_KEY) \
+		--header-size 0x200 \
+		--align 8 \
+		-S 0x20000 \
+		-v 1.0.0 \
+		--pad --pad-header \
+		--confirm \
+		$< $@
+
+# Confirmed HEX for flashing to 0x08020000 (slot 0)
+$(BUILD_DIR)/$(TARGET)-signed-confirmed.hex: $(BUILD_DIR)/$(TARGET)-signed-confirmed.bin
+	$(CP) -I binary -O ihex --change-addresses=0x08020000 $< $@
 
 $(BUILD_DIR):
 	mkdir -p $@
