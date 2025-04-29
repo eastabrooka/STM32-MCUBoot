@@ -21,7 +21,7 @@ MCUBOOT_INC_DIR := $(MCUBOOT_DIR)/include
 MBEDTLS_DIR := $(ROOT_DIR)/mcuboot/ext/mbedtls/library
 
 IMGTOOL_PY := $(ROOT_DIR)/mcuboot/scripts/imgtool.py
-IMG_SIGN_KEY := $(ROOT_DIR)/DebugKeys/root-ec-p256.pem
+IMG_SIGN_KEY := $(ROOT_DIR)/DebugKeys/rsa-2048.pem
 
 PREFIX = arm-none-eabi-
 CC = $(PREFIX)gcc
@@ -96,7 +96,6 @@ C_SOURCES = \
     $(MCUBOOT_SRC_DIR)/image_rsa.c \
     $(MCUBOOT_SRC_DIR)/swap_scratch.c \
     $(MCUBOOT_SRC_DIR)/fault_injection_hardening.c \
-    $(MCUBOOT_SRC_DIR)/image_ecdsa.c \
     $(MCUBOOT_SRC_DIR)/boot_record.c \
     $(MCUBOOT_SRC_DIR)/bootutil_public.c \
     $(MCUBOOT_SRC_DIR)/tlv.c \
@@ -105,7 +104,6 @@ C_SOURCES = \
     $(MCUBOOT_SRC_DIR)/fault_injection_hardening_delay_rng_mbedtls.c \
     $(MCUBOOT_SRC_DIR)/swap_move.c \
     $(MCUBOOT_SRC_DIR)/swap_misc.c \
-    $(MCUBOOT_SRC_DIR)/image_ed25519.c \
     $(MCUBOOT_SRC_DIR)/swap_offset.c \
     $(MCUBOOT_SRC_DIR)/encrypted.c \
     $(MBEDTLS_DIR)/asn1parse.c \

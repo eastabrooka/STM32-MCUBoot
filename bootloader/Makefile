@@ -68,7 +68,7 @@ C_SOURCES = \
     Core/Src/stm32l4xx_hal_msp.c \
     Core/Src/log_port.c \
     $(COMMON_SRC_DIR)/mcuboot_port.c \
-    $(ROOT_DIR)/DebugKeys/root-ec-p256-pub.c \
+    $(ROOT_DIR)/DebugKeys/rsa-2048-pub.c \
     Core/Src/shell_port.c \
     Core/Src/shell.c \
     Core/Src/shell_commands.c \
@@ -121,7 +121,9 @@ C_SOURCES = \
     $(MBEDTLS_DIR)/sha256.c \
     $(MBEDTLS_DIR)/bignum.c \
     $(MBEDTLS_DIR)/ecdsa.c \
-    $(MBEDTLS_DIR)/platform_util.c
+    $(MBEDTLS_DIR)/platform_util.c \
+    $(MBEDTLS_DIR)/rsa.c \
+    $(MBEDTLS_DIR)/md.c
 
 ASM_SOURCES = startup_stm32l4a6xx.s
 
