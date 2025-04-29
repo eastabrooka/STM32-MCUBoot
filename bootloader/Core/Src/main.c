@@ -124,6 +124,26 @@ void jump_to_application(void)
 
 
 
+void try_erase_bank2_page0(void) {
+  HAL_FLASH_Unlock();
+
+  FLASH_EraseInitTypeDef erase_init = {0};
+  uint32_t page_error = 0;
+
+  erase_init.TypeErase = FLASH_TYPEERASE_PAGES;
+  erase_init.Banks = FLASH_BANK_2;
+  erase_init.Page = 0; // First page of Bank 2 (0x08040000)
+  erase_init.NbPages = 1;
+
+  if (HAL_FLASHEx_Erase(&erase_init, &page_error) != HAL_OK) {
+      printf("Manual Erase failed. Page error = 0x%08lX\n", page_error);
+  } else {
+      printf("Manual Erase OK at Bank 2 Page 0\n");
+  }
+
+  HAL_FLASH_Lock();
+}
+
 
 /**
   * @brief  The application entry point.
@@ -163,10 +183,12 @@ int main(void)
   BlueLED(GPIO_PIN_SET);
 
   // Echo "Hello World"
-  char msg[] = "Hurr Durr, I'm a Bootloader\r\n";
+  char msg[] = "Hurr Durr, I'm a Bootloader.\r\n";
   HAL_UART_Transmit(&hlpuart1, (uint8_t*)msg, sizeof(msg)-1, HAL_MAX_DELAY);
 
-  //read_flash();
+  printf("Attempting Erase \n");
+  try_erase_bank2_page0();
+
   
   EXAMPLE_LOG("\n\r___  ________ _   _ _                 _   ");
   EXAMPLE_LOG("|  \\/  /  __ \\ | | | |               | |  ");
