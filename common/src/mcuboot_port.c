@@ -143,9 +143,16 @@ void example_internal_flash_erase_sector(uint32_t addr) {
     uint32_t page_error = 0;
 
     erase_init.TypeErase = FLASH_TYPEERASE_PAGES;
-    erase_init.Page = (addr - 0x08000000) / FLASH_SECTOR_SIZE;
+
+    if (addr < 0x08040000) {
+        erase_init.Banks = FLASH_BANK_1;
+        erase_init.Page = (addr - 0x08000000) / FLASH_SECTOR_SIZE;
+    } else {
+        erase_init.Banks = FLASH_BANK_2;
+        erase_init.Page = (addr - 0x08040000) / FLASH_SECTOR_SIZE; // <<< fix here
+    }
+
     erase_init.NbPages = 1;
-    erase_init.Banks = FLASH_BANK_1;
 
     if (HAL_FLASHEx_Erase(&erase_init, &page_error) != HAL_OK) {
         // handle error
@@ -154,7 +161,6 @@ void example_internal_flash_erase_sector(uint32_t addr) {
 
     HAL_FLASH_Lock();
 }
-
 //
 // Flash area read/write/erase
 //
@@ -217,11 +223,18 @@ int flash_area_erase(const struct flash_area *fa, uint32_t off, uint32_t len) {
     }
 
     uint32_t addr = fa->fa_off + off;
-    MCUBOOT_LOG_DBG("%s: Erase Addr: 0x%08x Length: %d", __func__,
-                    (unsigned int)addr, (int)len);
+    MCUBOOT_LOG_DBG("%s: Erase Addr: 0x%08x Length: %d", __func__, (unsigned int)addr, (int)len);
 
     for (uint32_t i = 0; i < len; i += FLASH_SECTOR_SIZE) {
-        example_internal_flash_erase_sector(addr + i);
+        uint32_t current_addr = addr + i;
+
+        // ADD THIS:
+        printf("[ERASE] About to erase sector at 0x%08X\n", current_addr);
+
+        example_internal_flash_erase_sector(current_addr);
+
+        // ADD THIS AFTER ERASE SUCCESS:
+        printf("[ERASE] Sector at 0x%08X erased OK\n", current_addr);
     }
 
 #if VALIDATE_PROGRAM_OP
@@ -236,7 +249,6 @@ int flash_area_erase(const struct flash_area *fa, uint32_t off, uint32_t len) {
 
     return 0;
 }
-
 //
 // Flash sector and area helpers needed by bootutil
 //
