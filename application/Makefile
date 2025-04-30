@@ -107,7 +107,6 @@ C_SOURCES = \
     $(MCUBOOT_SRC_DIR)/swap_move.c \
     $(MCUBOOT_SRC_DIR)/swap_misc.c \
     $(MCUBOOT_SRC_DIR)/image_ed25519.c \
-    $(MCUBOOT_SRC_DIR)/swap_offset.c \
     $(MCUBOOT_SRC_DIR)/encrypted.c \
     $(MBEDTLS_DIR)/asn1parse.c \
     $(MBEDTLS_DIR)/asn1write.c \
