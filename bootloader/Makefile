@@ -135,6 +135,7 @@ vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
 # Build rules
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
+	openocd -f interface/stlink.cfg -f target/stm32l4x.cfg -c "program build/NucleoBaseExample.elf verify reset exit"
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@

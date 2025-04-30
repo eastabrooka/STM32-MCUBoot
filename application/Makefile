@@ -130,7 +130,8 @@ vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
 # Build rules
 all: $(BUILD_DIR)/$(TARGET)-signed-confirmed.hex
-
+	openocd -f interface/stlink.cfg -f target/stm32l4x.cfg -c "program build/NucleoBaseExample-signed-confirmed.bin 0x08020000 verify reset exit"
+    
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@ 
 

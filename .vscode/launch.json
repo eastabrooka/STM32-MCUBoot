@@ -1,24 +1,25 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "name": "Debug Bootloader + App",
-        "type": "cppdbg",
-        "request": "launch",
-        "program": "${workspaceFolder}/bootloader/build/boot.elf",
-        "cwd": "${workspaceFolder}",
-        "MIMode": "gdb",
-        "miDebuggerPath": "/usr/bin/arm-none-eabi-gdb",
-        "setupCommands": [
-          { "text": "target remote localhost:3333" },
-          { "text": "monitor reset halt" },
-          { "text": "load" },
-          { "text": "add-symbol-file ${workspaceFolder}/app/build/app.elf 0x08008000" },
-          { "text": "monitor reset init" }
-        ],
-        "preLaunchTask": "start-openocd",
-        "stopAtEntry": false
-      }
-    ]
-  }
-  
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Bootloader + App",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/bootloader/build/NucleoBaseExample.elf",
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/arm-none-eabi-gdb",
+      "setupCommands": [
+        { "text": "target remote localhost:3333" },
+        { "text": "monitor reset halt" },
+        { "text": "load" },
+        {
+          "text": "add-symbol-file ${workspaceFolder}/application/build/NucleoBaseExample.elf 0x08020000"
+        },
+        { "text": "monitor reset init" }
+      ],
+      "preLaunchTask": "start-openocd",
+      "stopAtEntry": false
+    }
+  ]
+}

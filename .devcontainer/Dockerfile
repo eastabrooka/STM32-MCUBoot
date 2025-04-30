@@ -19,7 +19,12 @@ RUN apt-get update && apt-get install -y \
     xz-utils \
     openocd \
     gcc-arm-none-eabi \
+    usbutils \
+    vim-common \
+    stlink-tools \
+    picocom \
     && apt-get clean
+
 
 # Install Python packages needed for imgtool
 RUN pip3 install --upgrade pip && \
