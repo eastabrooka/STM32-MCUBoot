@@ -47,6 +47,7 @@ CFLAGS += -I../Drivers/CMSIS/Include
 CFLAGS += -I$(COMMON_INC_DIR)
 CFLAGS += -I$(MCUBOOT_INC_DIR)
 CFLAGS += -I$(ROOT_DIR)/mcuboot/ext/mbedtls/include
+CFLAGS += -Wno-implicit-function-declaration 
 
 ifeq ($(DEBUG),1)
 CFLAGS += -g -gdwarf-2
