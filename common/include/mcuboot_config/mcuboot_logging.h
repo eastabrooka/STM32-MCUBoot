@@ -12,3 +12,9 @@
   EXAMPLE_LOG("[INF] " _fmt, ##__VA_ARGS__)
 #define MCUBOOT_LOG_DBG(_fmt, ...) \
   EXAMPLE_LOG("[DBG] " _fmt, ##__VA_ARGS__)
+
+
+
+#define MCUBOOT_LOG_MODULE_DECLARE(domain)  /* ignore */
+#define MCUBOOT_LOG_MODULE_REGISTER(domain) /* ignore */
+

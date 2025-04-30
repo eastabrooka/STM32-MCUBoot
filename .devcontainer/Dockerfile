@@ -16,12 +16,13 @@ RUN apt-get update && apt-get install -y \
     openssh-client \
     udev \
     bsdmainutils \
+    xz-utils \
     && apt-get clean
 
 # Install Python packages needed for imgtool
 RUN pip3 install --upgrade pip && \
     pip3 install \
-    cryptography>=40.0.0 \
+    "cryptography>=40.0.0" \
     intelhex \
     click \
     cbor2 \
@@ -29,11 +30,11 @@ RUN pip3 install --upgrade pip && \
     pyyaml \
     pytest
 
-# Install ARM GCC toolchain
-RUN wget -q https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2 \
-    && tar -xf gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2 \
-    && mv gcc-arm-none-eabi-10.3-2021.10 /opt/gcc-arm-none-eabi \
-    && rm gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
+# Install ARM GCC toolchain (GCC 14.2.1)
+RUN wget -q https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi.tar.xz \
+    && tar -xf arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi.tar.xz \
+    && mv arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi /opt/gcc-arm-none-eabi \
+    && rm arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi.tar.xz
 
 # Set environment
 ENV PATH="/opt/gcc-arm-none-eabi/bin:${PATH}"
