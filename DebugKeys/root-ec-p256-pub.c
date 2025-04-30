@@ -21,7 +21,7 @@ const unsigned int ecdsa_pub_key_len = 91;
 const struct bootutil_key bootutil_keys[] = {
     {
         .key = ecdsa_pub_key,
-        .len = sizeof(ecdsa_pub_key),
+        .len = &bootutil_key_cnt,
     },
 };
 
