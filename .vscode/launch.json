@@ -10,17 +10,29 @@
       "MIMode": "gdb",
       "miDebuggerPath": "/opt/gcc-arm-none-eabi/bin/arm-none-eabi-gdb",
       "setupCommands": [
-        { "text": "target remote localhost:3333" },
-        { "text": "monitor reset halt" },
-        { "text": "load" },
+        {
+          "text": "file ${workspaceFolder}/bootloader/build/NucleoBaseExample.elf"
+        },
+        {
+          "text": "target remote localhost:3333"
+        },
+        {
+          "text": "monitor reset halt"
+        },
+        {
+          "text": "load"
+        },
         {
           "text": "add-symbol-file ${workspaceFolder}/application/build/NucleoBaseExample.elf 0x08020200"
         },
-        { "text": "monitor reset init" }
+        {
+          "text": "monitor reset init"
+        }
       ],
       "preLaunchTask": "start-openocd",
       "postDebugTask": "terminate-openocd",
-      "stopAtEntry": false
+      "stopAtEntry": false,
+      "externalConsole": false
     }
   ]
 }
