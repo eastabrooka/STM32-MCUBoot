@@ -7,17 +7,16 @@
       "command": "openocd -f interface/stlink.cfg -f target/stm32l4x.cfg",
       "isBackground": true,
       "problemMatcher": {
-        "owner": "openocd",
-        "pattern": [
-          {
-            "regexp": "."
-          }
-        ],
+        "pattern": "$tsc",
         "background": {
           "activeOnStart": true,
-          "beginsPattern": "Info : Listening on port 3333 for gdb connections",
-          "endsPattern": "Info : Listening on port 3333 for gdb connections"
+          "beginsPattern": "Info : Listening on port 3333.*gdb connections",
+          "endsPattern": "Info : Listening on port 3333.*gdb connections"
         }
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
       }
     },
     {
