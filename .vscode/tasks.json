@@ -5,8 +5,26 @@
       "label": "start-openocd",
       "type": "shell",
       "command": "openocd -f interface/stlink.cfg -f target/stm32l4x.cfg",
-      "problemMatcher": [],
-      "isBackground": true
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "openocd",
+        "pattern": [
+          {
+            "regexp": "."
+          }
+        ],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Info : Listening on port 3333 for gdb connections",
+          "endsPattern": "Info : Listening on port 3333 for gdb connections"
+        }
+      }
+    },
+    {
+      "label": "terminate-openocd",
+      "type": "shell",
+      "command": "pkill openocd",
+      "problemMatcher": []
     }
   ]
 }

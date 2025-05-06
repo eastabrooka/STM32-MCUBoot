@@ -71,3 +71,9 @@ This root-ec-p256-pub.c is a C file.
 You compile this into MCUboot.
 
 It defines a struct like bootutil_keys.c with the public key inside.
+
+
+
+alias picocomfix="picocom --imap delbs --omap crlf /dev/ttyUSB0"
+
+

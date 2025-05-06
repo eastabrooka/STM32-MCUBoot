@@ -62,9 +62,6 @@ void RedLED(GPIO_PinState State)
 }
 
 
-
-
-
 #define APP_START_ADDRESS 0x08020000
 
 void jump_to_application(void)

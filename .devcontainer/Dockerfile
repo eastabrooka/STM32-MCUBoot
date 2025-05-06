@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y \
     vim-common \
     stlink-tools \
     picocom \
+    nano \
     && apt-get clean
 
 
