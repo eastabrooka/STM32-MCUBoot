@@ -156,7 +156,7 @@ $(BUILD_DIR)/$(TARGET)-signed-confirmed.bin: $(BUILD_DIR)/$(TARGET).bin
 		--header-size 0x200 \
 		--align 8 \
 		-S 0x20000 \
-		-v 1.0.0 \
+		-v 1.0.5 \
 		--pad --pad-header \
 		--confirm \
 		$< $@

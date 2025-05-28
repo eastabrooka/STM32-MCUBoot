@@ -26,7 +26,6 @@ RUN apt-get update && apt-get install -y \
     nano \
     && apt-get clean
 
-
 # Install Python packages needed for imgtool
 RUN pip3 install --upgrade pip && \
     pip3 install \
@@ -47,14 +46,14 @@ RUN wget -q https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binr
 # Set environment
 ENV PATH="/opt/gcc-arm-none-eabi/bin:${PATH}"
 
-# Create devuser
-RUN useradd -m devuser && echo "devuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+# Create devuser and add to dialout and plugdev groups
+RUN useradd -m -G dialout,plugdev devuser && echo "devuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Prepare SSH folder (host will mount over it)
 RUN mkdir -p /home/devuser/.ssh && chmod 700 /home/devuser/.ssh && chown devuser:devuser /home/devuser/.ssh
 
-# Optional: Placeholder for USB udev rules
-RUN mkdir -p /etc/udev/rules.d
+# Add udev rule for ST-Link (VID:PID 0483:374B)
+RUN echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374b", MODE="0666", GROUP="plugdev"' > /etc/udev/rules.d/49-stlinkv2.rules
 
 # Set workspace
 USER devuser
