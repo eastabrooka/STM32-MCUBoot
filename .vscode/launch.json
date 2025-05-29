@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Bootloader + App",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/bootloader/build/NucleoBaseExample.elf",
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/opt/gcc-arm-none-eabi/bin/arm-none-eabi-gdb",
+      "setupCommands": [
+        {
+          "text": "file ${workspaceFolder}/bootloader/build/NucleoBaseExample.elf"
+        },
+        {
+          "text": "target remote localhost:3333"
+        },
+        {
+          "text": "monitor reset halt"
+        },
+        {
+          "text": "load"
+        },
+        {
+          "text": "add-symbol-file ${workspaceFolder}/application/build/NucleoBaseExample.elf 0x08020200"
+        },
+        {
+          "text": "monitor reset init"
+        }
+      ],
+      "preLaunchTask": "start-openocd",
+      "postDebugTask": "terminate-openocd",
+      "stopAtEntry": false,
+      "externalConsole": false
+    }
+  ]
+}
