@@ -1,42 +1,40 @@
-/* 
-*******************************************************************************
-**
-**  File        : LinkerScript.ld 
-**  Author      : STM32CubeMX 
-**  Abstract    : Linker script for STM32L4A6ZGTx series 
-*******************************************************************************
-*/
-
 /* Entry Point */ 
 ENTRY(Reset_Handler) 
- 
-_estack = ORIGIN(RAM) + LENGTH(RAM);    /* end of RAM */ 
-_Min_Heap_Size = 0x200;      /* required heap size */ 
-_Min_Stack_Size = 0x400;     /* required stack size */
- 
-/* Specify the memory areas */ 
-MEMORY 
-{ 
-  RAM (xrw)             : ORIGIN = 0x20000000, LENGTH = 320K 
-  RAM2 (xrw)            : ORIGIN = 0x10000000, LENGTH = 64K 
-  FLASH (rx)            : ORIGIN = 0x08000000, LENGTH = 128K
 
-  /* extra flash regions for bootloader and update handling */
-  FLASH_PRIMARY (rx)    : ORIGIN = 0x08020000, LENGTH = 128K 
-  FLASH_SECONDARY (rx)  : ORIGIN = 0x08040000, LENGTH = 128K 
-  FLASH_SCRATCH (rx)    : ORIGIN = 0x08060000, LENGTH = 16K 
+_estack         = ORIGIN(RAM) + LENGTH(RAM);   /* end of RAM */ 
+_Min_Heap_Size  = 0x200;                       /* heap size */ 
+_Min_Stack_Size = 0x400;                       /* stack size */
+
+/* Flash + RAM partitions, all on 2 KB-sector boundaries */
+MEMORY
+{
+  /*  96 KB bootloader @ 0x0800_0000 */
+  FLASH_BOOTLOADER (rx) : ORIGIN = 0x08000000, LENGTH = 96K
+
+  /* 128 KB primary image @ 0x0801_8000 */
+  FLASH_PRIMARY    (rx) : ORIGIN = 0x08018000, LENGTH = 128K
+
+  /* 128 KB secondary image @ 0x0803_8000 */
+  FLASH_SECONDARY  (rx) : ORIGIN = 0x08038000, LENGTH = 128K
+
+  /*  16 KB scratch       @ 0x0805_8000 */
+  FLASH_SCRATCH    (rx) : ORIGIN = 0x08058000, LENGTH = 16K
+
+  /* RAM regions (unchanged) */
+  RAM   (xrw) : ORIGIN = 0x20000000, LENGTH = 320K
+  RAM2  (xrw) : ORIGIN = 0x10000000, LENGTH =  64K
 }
- 
-/* Define output sections */ 
-SECTIONS 
-{ 
+
+/* Output sections: put ALL code/data in FLASH_BOOTLOADER */
+SECTIONS
+{
   .isr_vector :
   {
     . = ALIGN(8);
     KEEP(*(.isr_vector))
     . = ALIGN(8);
-  } >FLASH
- 
+  } >FLASH_BOOTLOADER
+
   .text :
   {
     . = ALIGN(8);
@@ -49,23 +47,23 @@ SECTIONS
     KEEP(*(.fini))
     . = ALIGN(8);
     _etext = .;
-  } >FLASH
- 
+  } >FLASH_BOOTLOADER
+
   .rodata :
   {
     . = ALIGN(8);
     *(.rodata)
     *(.rodata*)
     . = ALIGN(8);
-  } >FLASH
- 
+  } >FLASH_BOOTLOADER
+
   .ARM.extab :
   {
     . = ALIGN(8);
     *(.ARM.extab* .gnu.linkonce.armextab.*)
     . = ALIGN(8);
-  } >FLASH
- 
+  } >FLASH_BOOTLOADER
+
   .ARM :
   {
     . = ALIGN(8);
@@ -73,8 +71,8 @@ SECTIONS
     *(.ARM.exidx*)
     __exidx_end = .;
     . = ALIGN(8);
-  } >FLASH
- 
+  } >FLASH_BOOTLOADER
+
   .preinit_array :
   {
     . = ALIGN(8);
@@ -82,8 +80,8 @@ SECTIONS
     KEEP(*(.preinit_array*))
     PROVIDE_HIDDEN(__preinit_array_end = .);
     . = ALIGN(8);
-  } >FLASH
- 
+  } >FLASH_BOOTLOADER
+
   .init_array :
   {
     . = ALIGN(8);
@@ -92,8 +90,8 @@ SECTIONS
     KEEP(*(.init_array*))
     PROVIDE_HIDDEN(__init_array_end = .);
     . = ALIGN(8);
-  } >FLASH
- 
+  } >FLASH_BOOTLOADER
+
   .fini_array :
   {
     . = ALIGN(8);
@@ -102,10 +100,10 @@ SECTIONS
     KEEP(*(.fini_array*))
     PROVIDE_HIDDEN(__fini_array_end = .);
     . = ALIGN(8);
-  } >FLASH
- 
+  } >FLASH_BOOTLOADER
+
   _sidata = LOADADDR(.data);
- 
+
   .data :
   {
     . = ALIGN(8);
@@ -114,8 +112,8 @@ SECTIONS
     *(.data*)
     . = ALIGN(8);
     _edata = .;
-  } >RAM AT> FLASH
- 
+  } >RAM AT> FLASH_BOOTLOADER
+
   . = ALIGN(4);
   .bss :
   {
@@ -128,7 +126,7 @@ SECTIONS
     _ebss = .;
     __bss_end__ = _ebss;
   } >RAM
- 
+
   ._user_heap_stack :
   {
     . = ALIGN(8);
@@ -138,13 +136,13 @@ SECTIONS
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
   } >RAM
- 
+
   /DISCARD/ :
   {
     libc.a(*)
     libm.a(*)
     libgcc.a(*)
   }
- 
+
   .ARM.attributes 0 : { *(.ARM.attributes) }
 }

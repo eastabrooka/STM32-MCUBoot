@@ -130,7 +130,7 @@ vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
 # Build rules
 all: $(BUILD_DIR)/$(TARGET)-signed-confirmed.hex
-	openocd -f interface/stlink.cfg -f target/stm32l4x.cfg -c "program build/NucleoBaseExample-signed-confirmed.bin 0x08020000 verify reset exit"
+	openocd -f interface/stlink.cfg -f target/stm32l4x.cfg -c "program build/NucleoBaseExample-signed-confirmed.bin 0x08018000 verify reset exit"
     
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@ 
@@ -145,25 +145,36 @@ $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 $(BUILD_DIR)/$(TARGET).bin: $(BUILD_DIR)/$(TARGET).elf | $(BUILD_DIR)
 	$(BIN) $< $@
 
+# Unsigned → signed (overwrite-only)
 $(BUILD_DIR)/$(TARGET)-signed.bin: $(BUILD_DIR)/$(TARGET).bin
-	python3 $(IMGTOOL_PY) sign --key $(IMG_SIGN_KEY) --header-size 0x200 --align 8 -S 0x20000 --pad --pad-header  --confirm  -v 1.0.0 $< $@
+	python3 $(IMGTOOL_PY) sign \
+		--key $(IMG_SIGN_KEY) \
+		--header-size 0x200 \
+		--align 8 \
+		--slot-size 0x20000 \
+		--overwrite-only \
+		--pad --pad-header \
+		--confirm \
+		-v 1.0.0 \
+		$< $@
 
 
-# Confirmed signed BIN
+# Unsigned → confirmed signed
 $(BUILD_DIR)/$(TARGET)-signed-confirmed.bin: $(BUILD_DIR)/$(TARGET).bin
 	python3 $(IMGTOOL_PY) sign \
 		--key $(IMG_SIGN_KEY) \
 		--header-size 0x200 \
 		--align 8 \
-		-S 0x20000 \
-		-v 1.0.5 \
+		--slot-size 0x20000 \
+		--overwrite-only \
 		--pad --pad-header \
 		--confirm \
+		-v 1.0.5 \
 		$< $@
 
-# Confirmed HEX for flashing to 0x08020000 (slot 0)
+# Confirmed HEX for flashing to 0x08018000  (slot 0)
 $(BUILD_DIR)/$(TARGET)-signed-confirmed.hex: $(BUILD_DIR)/$(TARGET)-signed-confirmed.bin
-	$(CP) -I binary -O ihex --change-addresses=0x08020000 $< $@
+	$(CP) -I binary -O ihex --change-addresses=0x08018000  $< $@
 
 $(BUILD_DIR):
 	mkdir -p $@
