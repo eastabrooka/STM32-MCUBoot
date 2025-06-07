@@ -30,6 +30,7 @@
     "--cap-add=SYS_PTRACE",
     "--security-opt",
     "seccomp=unconfined"
+    "--device=/dev/bus/usb/003/005"
   ],
   "remoteUser": "devuser"
 }

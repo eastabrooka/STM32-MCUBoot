@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
     stlink-tools \
     picocom \
     nano \
+    openocd\
     && apt-get clean
 
 # Install Python packages needed for imgtool
