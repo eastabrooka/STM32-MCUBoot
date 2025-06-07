@@ -1,8 +1,6 @@
 {
   "name": "ARM Embedded Dev",
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
+  "image": "mcuboot-dev",
   "settings": {
     "terminal.integrated.defaultProfile.linux": "bash"
   },

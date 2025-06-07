@@ -53,8 +53,9 @@ RUN useradd -m -G dialout,plugdev devuser && echo "devuser ALL=(ALL) NOPASSWD:AL
 # Prepare SSH folder (host will mount over it)
 RUN mkdir -p /home/devuser/.ssh && chmod 700 /home/devuser/.ssh && chown devuser:devuser /home/devuser/.ssh
 
-# Add udev rule for ST-Link (VID:PID 0483:374B)
-RUN echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374b", MODE="0666", GROUP="plugdev"' > /etc/udev/rules.d/49-stlinkv2.rules
+# Add udev rules for ST-Link and Virtual COM Port access
+RUN echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", MODE="0666", GROUP="plugdev"' > /etc/udev/rules.d/49-stlink.rules && \
+    echo 'KERNEL=="ttyACM[0-9]*", MODE="0666", GROUP="dialout"' >> /etc/udev/rules.d/49-stlink.rules
 
 # Set workspace
 USER devuser
